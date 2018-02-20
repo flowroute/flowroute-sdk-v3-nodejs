@@ -1,27 +1,43 @@
-//!/usr/bin/env node
+#!/usr/bin/env node
 require('dotenv').config();
-var flowroute = require('.//lib');
+const flowroute = require('./lib');
 
 console.log("Number//Route Management v2 & Messaging v2.1 Demo");
 
 // Set up your api credentials and test mobile number for outbound SMS or MMS
-flowroute.Configuration.basicAuthUserName = console.log(process.env.FR_ACCESS_KEY)
-flowroute.Configuration.basicAuthPassword = console.log(process.env.FR_SECRET_KEY)
-mobile_number = "12067392634"
-
+flowroute.Configuration.basicAuthUserName = process.env.FR_ACCESS_KEY
+flowroute.Configuration.basicAuthPassword = process.env.FR_SECRET_KEY
+//mobile_number = process.env.MOBILE_NUMBER
 
 // Instantiate API client and create controllers for Numbers, Messages, and Routes
-client = FlowroutenumbersandmessagingClient(basic_auth_user_name, basic_auth_password)
-numbers_controller = client.numbers
-routes_controller = client.routes
-messages_controller = client.messages
+var numbers_controller = flowroute.NumbersController;
+var routes_controller = flowroute.RoutesController;
+var messages_controller = flowroute.MessagesController;
 
-print("--List Available Area Codes")
-max_setup_cost = 3.25
-limit = 3
-offset = None
-result = numbers_controller.list_available_area_codes(limit, offset, max_setup_cost)
-pprint.pprint(result)
+var max_setup_cost = 3.25;
+var limit = 3;
+var offset = 0;
+
+var callback = function(error, response, context){}
+
+areacodes = numbers_controller.listAvailableAreaCodes(limit, offset, max_setup_cost, callback);
+areacodes.then(function(response) {
+  console.log("--List Available Area Codes")
+  console.log(response);
+}, function(err) {
+  console.log(err);
+});
+
+var areacode = 206;
+excodes = numbers_controller.listAvailableExchangeCodes(limit, offset, max_setup_cost, areacode, callback);
+
+excodes.then(function(response) {
+  console.log("--List Available Exchange Codes")
+  console.log(response);
+}, function(err) {
+  console.log(err);
+});
+/*
 
 print("--List Available Exchange Codes")
 limit = 3
@@ -80,7 +96,7 @@ request_body = '{ \
   } \
 }'
 result = routes_controller.create_an_inbound_route(request_body)
-pprint.pprint(result)*/
+pprint.pprint(result)
 
 print ("---List Inbound Routes")
 limit = 3
@@ -147,4 +163,4 @@ message_id = result['data'][0]['id']
 result = messages_controller.look_up_a_message_detail_record(message_id)
 pprint.pprint(result)
 
-
+*/
