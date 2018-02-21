@@ -56,29 +56,29 @@ In Flowroute's approach to building the Node.js library v3, HTTP requests are ha
 
 Contains all of the methods necessary to search through Flowroute's phone number inventory, purchase a phone number, and review details of your account phone numbers.
 
-*   [listAvailableAreaCodes(options, callback)](#list_available_area_codes) \- Returns a list of all Numbering Plan Area (NPA) codes containing purchasable phone numbers. All request parameters are optional. If you don't specify a limit, results are limited to the first 10 items.
-*   [listAvailableExchangeCodes(options, callback)](#list_available_exchange_codes) \- Returns a list of all Central Office (exchange) codes containing purchasable phone numbers. All request parameters are optional.
-*   [searchForPurchasablePhoneNumbers(options, callback)](#search_for_purchasable_phone_numbers) \- Searches for purchasable phone numbers by state or rate center, or by your specified search value.
-*   [purchaseAPhoneNumber(numberId, callback)](#purchase_a_phone_numbernumber_id) \- Lets you purchase a phone number from available Flowroute inventory.
-*   [getAccountPhoneNumbers(options, callback)](#list_account_phone_numbers) \- Returns a list of all phone numbers currently on your Flowroute account. 
-*   [getPhoneNumberDetails(numberId, callback)](#list_phone_number_detailsnumber_id) \- Returns details on a specific phone number associated with your account, including primary voice route, and failover voice route if previously configured.
+*   [listAvailableAreaCodes(options, callback)](#listavailableareacodes) \- Returns a list of all Numbering Plan Area (NPA) codes containing purchasable phone numbers. All request parameters are optional. If you don't specify a limit, results are limited to the first 10 items.
+*   [listAvailableExchangeCodes(options, callback)](#listavailableexchangecodes) \- Returns a list of all Central Office (exchange) codes containing purchasable phone numbers. All request parameters are optional.
+*   [searchForPurchasablePhoneNumbers(options, callback)](#searchforpurchasablephonenumbers) \- Searches for purchasable phone numbers by state or rate center, or by your specified search value.
+*   [purchaseAPhoneNumber(numberId, callback)](#purchaseaphonenumbernumberid) \- Lets you purchase a phone number from available Flowroute inventory.
+*   [getAccountPhoneNumbers(options, callback)](#getaccountphonenumbers) \- Returns a list of all phone numbers currently on your Flowroute account. 
+*   [getPhoneNumberDetails(numberId, callback)](#getphonenumberdetailsnumberid-callback) \- Returns details on a specific phone number associated with your account, including primary voice route, and failover voice route if previously configured.
 
 ### RoutesController
     
 Contains the methods required to create new inbound routes, view all of your account routes, and update primary and failover voice routes for your phone numbers.
     
-*   [createAnInboundRoute(routeBody, callback)](#create_an_inbound_routeroute_body) \- Creates a new inbound route which can then be assigned as either a primary or a failover voice route for a phone number on your account.
-*   [listInboundRoutes(options, callback)](#list_inbound_routes) \- Returns a list of your inbound routes. From the list, you can then select routes to use as the primary and failover voice routes for phone numbers on your account.
-*   [updatePrimaryVoiceRouteForAPhoneNumber(numberId, routeBody, callback)](#update_primary_voice_routenumber_id-route_body) \- Updates the primary voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` method.
-*   [updateFailoverVoiceRouteForAPhoneNumber(numberId, routeBody, callback)](#update_failover_voice_routenumber_id-route_body) \- Updates the failover voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` method.
+*   [createAnInboundRoute(routeBody, callback)](#createaninboundrouteroutebody-callback) \- Creates a new inbound route which can then be assigned as either a primary or a failover voice route for a phone number on your account.
+*   [listInboundRoutes(options, callback)](#listinbounroutescallback) \- Returns a list of your inbound routes. From the list, you can then select routes to use as the primary and failover voice routes for phone numbers on your account.
+*   [updatePrimaryVoiceRouteForAPhoneNumber(updateprimaryvoicerouteforaphonenumbernumberid-routebody-callback)](#update_primary_voice_routenumber_id-route_body) \- Updates the primary voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` method.
+*   [updateFailoverVoiceRouteForAPhoneNumber(numberId, routeBody, callback)](#updatefailovervoicerouteforaphonenumbernumberid-routebody-callback) \- Updates the failover voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` method.
 
 ###   MessagesController
     
 Contains the methods required to send an MMS or SMS, and review a specific Message Detail Record (MDR) or a set of messages.
     
-*   [sendAMessage(messageBody, callback)](#send_a_messagemessage_body) \- Sends an SMS or MMS from a Flowroute long code or toll-free phone number to another valid phone number.
-*   [look\_up\_a\_message\_detail\_record()](#look_up_a_message_detail_recordmessage_id) \- Searches for a specific message record ID and returns a Message Detail Record (in MDR2 format).
-*   [lookUpAMessageDetailRecord(messageId, callback)](#look_up_a_set_of_messagesstart_date) \- Retrieves a list of Message Detail Records (MDRs) within a specified date range. Date and time is based on Coordinated Universal Time (UTC).
+*   [sendAMessage(messageBody, callback)](#sendamessagemessagebody-callback) \- Sends an SMS or MMS from a Flowroute long code or toll-free phone number to another valid phone number.
+*   [look\_up\_a\_message\_detail\_record()](#lookupamessagedetailrecordmessageid) \- Searches for a specific message record ID and returns a Message Detail Record (in MDR2 format).
+*   [lookUpAMessageDetailRecord(messageId, callback)](#lookupasetofmessagesstartdate-callback) \- Retrieves a list of Message Detail Records (MDRs) within a specified date range. Date and time is based on Coordinated Universal Time (UTC).
 
 The following shows an example of a single Node.js file that imports the Flowroute API client and all the required modules. The Node.js library v3 comes with a **demo.js** file that you can edit and run as an example.
 
@@ -798,10 +798,10 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 ```
 #### Errors
 
-In cases of method errors, the Node.js library raises an exception which includes the HTTP Response code, an error message, and the HTTP body that was received in the request. 
+In cases of method errors, the Node.js library raises an exception which includes an error message, and the HTTP body that was received in the request. 
 
 ##### Example Error
 ```
-raise ErrorException('403 Forbidden – The server understood the request but refuses to authorize it.', _context)
+raise ErrorException('Forbidden – The server understood the request but refuses to authorize it.', _context)
 ```
   
