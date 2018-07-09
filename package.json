@@ -19,9 +19,8 @@
     "eslint-plugin-react": "^6.10.3"
   },
   "dependencies": {
-    "dotenv": "^5.0.0",
-    "moment": "^2.17.1",
-    "request": "^2.55.0"
+    "request": "^2.55.0",
+    "moment": "^2.17.1"
   },
   "eslintConfig": {
     "extends": "airbnb",
@@ -31,10 +30,7 @@
       "mocha": true
     },
     "rules": {
-      "indent": [
-        "error",
-        4
-      ],
+      "indent": ["error", 4],
       "no-underscore-dangle": 0,
       "strict": 0,
       "prefer-rest-params": 0
