@@ -427,7 +427,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 }
 ```
 
-#### getAccountPhoneNumbers()
+#### getAccountPhoneNumbers(options, callback)
 
 The function accepts `starts_with`, `ends_with`, `contains`, `limit`, `offset` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-phone-numbers/). 
     
@@ -1019,9 +1019,13 @@ The function accepts an E911 object with its different attributes as a parameter
     
 ##### Example Request
 ```
-echo "--Create an E911 Address\n";
-$result = $client-&gt;getE911s()-&gt;create&gt;address($body);
-var_dump($result);
+var create_address = e911s_controller.createAndValidateANewE911Address(e911address, callback);
+create_address.then(function(response) {
+  console.log("--Create and Validate an E911 Address")
+  console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 
 ##### Example Response
@@ -1029,21 +1033,21 @@ var_dump($result);
 On success, the HTTP status code in the response header is `201 Created` and the response body contains the newly created e911 object in JSON format. On error, a printable representation of the detailed API response is displayed.
 
 ```
---Create an E911 Address
+--Create and Validate an E911 Address
 {
   "data": {
     "attributes": {
       "address_type": "Apartment",
-      "address_type_number": "601",
-      "city": "Tacoma",
+      "address_type_number": "666",
+      "city": "Seattle",
       "country": "US",
-      "first_name": "Dan",
-      "label": "Home",
-      "last_name": "Smith",
+      "first_name": "Jim",
+      "label": "Belfry Oddities II",
+      "last_name": "Law",
       "state": "WA",
-      "street_name": "N Vassault",
-      "street_number": "3901",
-      "zip": "98407"
+      "street_name": "Smith St",
+      "street_number": "123",
+      "zip": "98101"
     },
     "id": "21907",
     "links": {
@@ -1053,19 +1057,20 @@ On success, the HTTP status code in the response header is `201 Created` and the
   }
 }
 ```
-#### update_address($e911_object, $detail_id)
+#### updateAndValidateAnExistingE911Address(e911Id, e911Address, callback)
 
-The function accepts an E911 object and an E911 record ID. Learn more about the different E911 attributes that you can update in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-and-validate-existing-e911-address/). In the following example, we will retrieve the record ID of our newly created E911 address and assign it to a variable, `detail_id`. We then update the `label` of our selected E911 address to "Work".
+The function accepts an `e911_address`, an `e911_id`, and `callback` as parameters. Learn more about the different E911 attributes that you can update in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-and-validate-existing-e911-address/). In the following example, we will retrieve the record of our previously declared e911 ID. We then update the `label` of our selected E911 address to "Funeral Homes".
     
 ##### Example Request
 ```
-$detail_id = $result->body->data->id;
-
-// Update an E911 Address
-echo "Update an E911 Address\n";
-$body->attributes->label = 'Work';
-$result = $client->getE911s()->update_address($body, $detail_id);
-var_dump($result);
+var updatedaddress = {"data":{"type": "e911", "attributes":{"label": "Funeral Homes"}}};
+var update_address = e911s_controller.updateAndValidateAnExistingE911Address(22127, updatedaddress, callback)
+update_address.then(function(response) {
+  console.log("--Update and Validate an E911 Address")
+  console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 ##### Example Response
 On success, the HTTP status code in the response header is `200 OK` and the response body contains the newly updated e911 object in JSON format. On error, a printable representation of the detailed API response is displayed.
@@ -1074,15 +1079,17 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 {
   "data": {
     "attributes": {
-      "city": "Tacoma",
+      "address_type": "Apartment",
+      "address_type_number": "666",
+      "city": "Seattle",
       "country": "US",
-      "first_name": "Dan",
-      "label": "Work",
-      "last_name": "Smith",
+      "first_name": "Jim",
+      "label": "Funeral Homes",
+      "last_name": "Law",
       "state": "WA",
-      "street_name": "N Vassault",
-      "street_number": "3901",
-      "zip": "98407"
+      "street_name": "Smith St",
+      "street_number": "123",
+      "zip": "98101"
     },
     "id": "21907",
     "links": {
@@ -1093,9 +1100,9 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 }
 ```
 
-#### associate_did($did_id, $detail_id)
+#### updateAssignAValidE911AddressToYourPhoneNumber(numberId, e911Id, callback)
 
-The function accepts a phone number and an E911 record ID as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-valid-e911-address-to-phone-number/). In the following example, we call the [getAccountPhoneNumbers](#getnumbersclient) function covered under Number Management to extract the value of the first item in the returned JSON array into variable `did_id`, pass our previously declared `detail_id` for the E911 record ID, and then make the association between them.
+The function accepts `number_id`, e911_id`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-valid-e911-address-to-phone-number/). In the following example, we call the [getAccountPhoneNumbers](#getnumbersclient) function covered under Number Management to extract the value of the first item in the returned JSON array into variable `did_id`, pass our previously declared `detail_id` for the E911 record ID, and then make the association between them.
     
 ##### Example Request
 ```
