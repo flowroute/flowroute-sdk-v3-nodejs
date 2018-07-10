@@ -12,6 +12,8 @@ The Flowroute Node.js library v3 provides methods for interacting with [Numbers 
         * [Numbers Controller](#numberscontroller)
         * [Routes Controller](#routescontroller)
         * [Messages Controller](#messagescontroller)
+        * [E911s Controller](#e911scontroller)
+        * [CNAMs Controller](#cnamscontroller)
     *   [Credentials](#credentials)
     *   [Methods](#methods)
     *   [Errors](#errors)
@@ -80,7 +82,34 @@ Contains the methods required to send an MMS or SMS, and review a specific Messa
 *   [look\_up\_a\_message\_detail\_record()](#lookupamessagedetailrecordmessageid) \- Searches for a specific message record ID and returns a Message Detail Record (in MDR2 format).
 *   [lookUpAMessageDetailRecord(messageId, callback)](#lookupasetofmessagesstartdate-callback) \- Retrieves a list of Message Detail Records (MDRs) within a specified date range. Date and time is based on Coordinated Universal Time (UTC).
 
-The following shows an example of a single Node.js file that imports the Flowroute API client and all the required modules. The Node.js library v3 comes with a **demo.js** file that you can edit and run as an example.
+### E911sController
+
+Contains all of the methods necessary to create, validate, update, and delete an E911 address on your account as well as assigning an E911 record to a phone number and if necessary, deactivating the E911 service for said phone number.
+
+*   [createAndValidateANewE911Address(e911Address, callback)](#) \- Lets you create and validate an E911 address within the US and Canada which can then be assigned to any of the long code or toll-free numbers on your account. To assign an E911 address to your number, see "Assign a Valid E911 Address to Your Phone Number".
+*   [listAccountE911Addresses(options, callback)](#) \- Returns a list of all E911 records on your account by default. You can apply search filters using any of the optional query parameters.
+*   [listE911RecordDetails(e911ID, callback)](#) \- Returns details on a specified E911 record ID.
+*   [createValidateAnE911Address(e911Address, callback)](#) \- Lets you validate an E911 address whether it is a new or an existing address on your account.
+*   [updateAndValidateAnExistingE911Address(e911Id, e911Address, callback)](#) \- Lets you update and validate an existing E911 address on your account. You must create the E911 address first by following "Create and Validate a New E911 Address".
+*   [updateAssignAValidE911AddressToYourPhoneNumber(numberId, e911Id, callback)]() \- Lets you assign a valid E911 address to a specific long code or toll-free phone number in your account. This endpoint does not return an error for subsequent attempts at associating a phone number with the same E911 record. The E911 record assignment charge only occurs on the first successful attempt. Note that you can later assign a different `e911_id` to the same phone number and will be charged accordingly.
+*   [deleteDeactivateE911ServiceForYourPhoneNumber(numberId, callback)](#) \- Lets you deactivate the current E911 service for your phone number.
+*   [listPhoneNumbersWithE911Record(e911Id, callback)](#) \- Returns a list of your Flowroute long code or toll-free phone numbers associated with a specified E911 record.
+*   [removeAnE911AddressFromYourAccount(e911Id, callback)](#) \- Lets you delete an E911 address associated with your account. You must remove all phone number associations first before you can successfully delete the specified E911 record.
+
+### CNAMsController
+
+Contains all of the methods necessary to create, delete, assign and unassign CNAM records, as well as view and filter for specific CNAM records on your Flowroute account.
+
+*   [createANewCNAMRecord(body, mContentType, callback)](#) \- Lets you create a Caller ID record for your account which can then be assigned to any of your long code numbers. To assign a CNAM record to your number, see "Assign a CNAM Record to a Phone Number".
+*   [listAccountCNAMRecords(options, callback)](#) \- Returns a list of all CNAM records on your account by default. You can apply search filters using any of the optional query parameters.
+*   [listCNAMRecordDetails(cnamId, callback)](#) \- Returns details pertaining to a specific CNAM record on your account, including long code numbers that are associated with the record.
+*   [updateAssignACNAMRecordToYourPhoneNumber(numberId, cnamId, callback)](#) \- Lets you associate a CNAM record with a specified long code number on your account. The CNAM value will be the Caller ID name displayed when making outbound calls on the specified long code number. Your CNAM must be approved before you can associate it with a number. Note that CNAM association with a phone number takes 5-7 business days.
+*   [deleteUnassignACNAMRecordFromYourPhoneNumber(numberId, callback)](#) \- Lets you unassign a CNAM record associated with a specified long code number on your account without deleting the CNAM record itself.
+*   [updateAssignAValidE911AddressToYourPhoneNumber(numberId, e911Id, callback)]() \- Lets you assign a valid E911 address to a specific long code or toll-free phone number in your account. This endpoint does not return an error for subsequent attempts at associating a phone number with the same E911 record. The E911 record assignment charge only occurs on the first successful attempt. Note that you can later assign a different `e911_id` to the same phone number and will be charged accordingly.
+*   [deleteACNAMRecord(cnamId, callback)](#) \- Lets you delete a CNAM record from your account. This will automatically disassociate all numbers associated with this CNAM record.
+
+
+The following shows an example of a single Node.js file that imports the Flowroute API client and all the required modules. The Node.js library v3 comes with three demo files named after the API resources they interact with: **number_route_message_demo.js** for Numbers v2, Routes v2, and Messages v2.1, **e911_demo.js** for E911s v2, and **cnam_demo.js** for CNAMs v2. You can edit and run any of the demo files for testing purposes.
 
 ```node
 #!/usr/bin/env node
@@ -102,12 +131,12 @@ var messages_controller = flowroute.MessagesController;
 
 #### Credentials
 
-In **demo.js**, replace `flowroute.Configuration.basicAuthUserName` with your API Access Key and `flowroute.Configuration.basicAuthUserName` with your API Secret Key from the [Flowroute Manager](https://manage.flowroute.com/accounts/preferences/api/). Note that in our example, we are accessing your Flowroute credentials as environment variables set in a `.env` file. This library should come with a configuration `.env` file that you can modify with your credentials and your mobile number for testing. To learn more about setting environment variables, see [How To Read and Set Environmental and Shell Variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps).
+As an example, we will be referencing the **number_route_message_demo.js** file. First, open up the file with your preferred code editor and replace `flowroute.Configuration.username` with your API Access Key and `flowroute.Configuration.password` with your API Secret Key from the [Flowroute Manager](https://manage.flowroute.com/accounts/preferences/api/). Note that in our example, we are accessing your Flowroute credentials as environment variables set in a `.env` file. This library should come with a configuration `.env` file that you can modify with your credentials and your mobile number for testing. To learn more about setting environment variables, see [How To Read and Set Environmental and Shell Variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps).
 
 ```node
 // Set up your api credentials and test mobile number for outbound SMS or MMS
-flowroute.Configuration.basicAuthUserName = process.env.FR_ACCESS_KEY
-flowroute.Configuration.basicAuthPassword = process.env.FR_SECRET_KEY
+flowroute.Configuration.username = process.env.FR_ACCESS_KEY
+flowroute.Configuration.password = process.env.FR_SECRET_KEY
 mobile_number = process.env.MOBILE_NUMBER
 ```
 
@@ -123,7 +152,104 @@ var messages_controller = flowroute.MessagesController;
 ```
 
 ## Methods
-The following section will demonstrate the capabilities of Numbers v2 and Messages v2.1 that are wrapped in our Node.js library. Note that the example responses have been formatted using Mac's `pbpaste` and `jq`. To learn more, see [Quickly Tidy Up JSON from the Command Line](http://onebigfunction.com/vim/2015/02/02/quickly-tidying-up-json-from-the-command-line-and-vim/). 
+The following section will demonstrate the capabilities of Numbers v2, Routes v2, Messages v2.1, E911s v2, and CNAMs v2 that are wrapped in the Flowroute Node.js Library v3. Note that the example responses have been formatted using Mac's `pbpaste` and `jq`. To learn more, see [Quickly Tidy Up JSON from the Command Line](http://onebigfunction.com/vim/2015/02/02/quickly-tidying-up-json-from-the-command-line-and-vim/). 
+
+### Number Management
+
+The Flowroute Node.js library v3  allows you to make HTTP requests to the `numbers` resource of Flowroute API v2: `https://api.flowroute.com/v2/numbers`
+
+#### listAvailableAreaCodes()
+
+The method accepts `limit`, `offset`, `max_setup_cost`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-available-area-codes/).
+    
+##### Example Request
+```node
+var max_setup_cost = 3.25;
+var limit = 3;
+var offset = 0;
+
+var callback = function(error, response, context){}
+
+areacodes = numbers_controller.listAvailableAreaCodes(limit, offset, max_setup_cost, callback);
+areacodes.then(function(response) {
+  console.log("--List Available Area Codes")
+  console.log(response);
+}, function(err) {
+  console.log(err);
+});
+```
+
+##### Example Response
+
+On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of area code objects in JSON format.
+
+```
+{
+  "data": [
+    {
+      "type": "areacode",
+      "id": "201",
+      "links": {
+        "related": "https://api.flowroute.com/v2/numbers/available/exchanges?areacode=201"
+      }
+    },
+    {
+      "type": "areacode",
+      "id": "202",
+      "links": {
+        "related": "https://api.flowroute.com/v2/numbers/available/exchanges?areacode=202"
+      }
+    },
+    {
+      "type": "areacode",
+      "id": "203",
+      "links": {
+
+
+The following shows an example of a single Node.js file that imports the Flowroute API client and all the required modules. The Node.js library v3 comes with three demo files named after the API resources they interact with: **number_route_message_demo.js** for Numbers v2, Routes v2, and Messages v2.1, **e911_demo.js** for E911s v2, and **cnam_demo.js** for CNAMs v2. You can edit and run any of the demo files for testing purposes.
+
+```node
+#!/usr/bin/env node
+require('dotenv').config();
+const flowroute = require('./lib');
+
+console.log("Number//Route Management v2 & Messaging v2.1 Demo");
+
+// Set up your api credentials and test mobile number for outbound SMS or MMS
+flowroute.Configuration.basicAuthUserName = process.env.FR_ACCESS_KEY
+flowroute.Configuration.basicAuthPassword = process.env.FR_SECRET_KEY
+mobile_number = process.env.MOBILE_NUMBER
+
+// Instantiate API client and create controllers for Numbers, Messages, and Routes
+var numbers_controller = flowroute.NumbersController;
+var routes_controller = flowroute.RoutesController;
+var messages_controller = flowroute.MessagesController;
+```    
+
+#### Credentials
+
+As an example, we will be referencing the **number_route_message_demo.js** file. First, open up the file with your preferred code editor and replace `flowroute.Configuration.username` with your API Access Key and `flowroute.Configuration.password` with your API Secret Key from the [Flowroute Manager](https://manage.flowroute.com/accounts/preferences/api/). Note that in our example, we are accessing your Flowroute credentials as environment variables set in a `.env` file. This library should come with a configuration `.env` file that you can modify with your credentials and your mobile number for testing. To learn more about setting environment variables, see [How To Read and Set Environmental and Shell Variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps).
+
+```node
+// Set up your api credentials and test mobile number for outbound SMS or MMS
+flowroute.Configuration.username = process.env.FR_ACCESS_KEY
+flowroute.Configuration.password = process.env.FR_SECRET_KEY
+mobile_number = process.env.MOBILE_NUMBER
+```
+
+#### Instantiate API Client and Controllers
+Next, instantiate the API Client and its controllers.
+
+```node
+// Instantiate API client and create controllers for Numbers, Messages, and Routes
+const flowroute = require('./lib');
+var numbers_controller = flowroute.NumbersController;
+var routes_controller = flowroute.RoutesController;
+var messages_controller = flowroute.MessagesController;
+```
+
+## Methods
+The following section will demonstrate the capabilities of Numbers v2, Routes v2, Messages v2.1, E911s v2, and CNAMs v2 that are wrapped in the Flowroute Node.js Library v3. Note that the example responses have been formatted using Mac's `pbpaste` and `jq`. To learn more, see [Quickly Tidy Up JSON from the Command Line](http://onebigfunction.com/vim/2015/02/02/quickly-tidying-up-json-from-the-command-line-and-vim/). 
 
 ### Number Management
 
