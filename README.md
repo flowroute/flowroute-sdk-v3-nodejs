@@ -62,7 +62,7 @@ Contains all of the functions necessary to search through Flowroute's phone numb
 *   [listAvailableExchangeCodes(options, callback)](#listavailableexchangecodes) \- Returns a list of all Central Office (exchange) codes containing purchasable phone numbers. All request parameters are optional.
 *   [searchForPurchasablePhoneNumbers(options, callback)](#searchforpurchasablephonenumbers) \- Searches for purchasable phone numbers by state or rate center, or by your specified search value.
 *   [purchaseAPhoneNumber(numberId, callback)](#purchaseaphonenumbernumberid) \- Lets you purchase a phone number from available Flowroute inventory.
-*   [getAccountPhoneNumbers(options, callback)](#getaccountphonenumbers) \- Returns a list of all phone numbers currently on your Flowroute account. 
+*   [getAccountPhoneNumbers(options, callback)](#getaccountphonenumbersoptions-callback) \- Returns a list of all phone numbers currently on your Flowroute account. 
 *   [getPhoneNumberDetails(numberId, callback)](#getphonenumberdetailsnumberid-callback) \- Returns details on a specific phone number associated with your account, including primary voice route, and failover voice route if previously configured.
 
 ### RoutesController
@@ -1102,43 +1102,45 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### updateAssignAValidE911AddressToYourPhoneNumber(numberId, e911Id, callback)
 
-The function accepts `number_id`, e911_id`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-valid-e911-address-to-phone-number/). In the following example, we call the [getAccountPhoneNumbers](#getnumbersclient) function covered under Number Management to extract the value of the first item in the returned JSON array into variable `did_id`, pass our previously declared `detail_id` for the E911 record ID, and then make the association between them.
+The function accepts `number_id`, e911_id`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-valid-e911-address-to-phone-number/). In the following example, replace the phone number ID with your Flowroute phone number, pass our previously declared e911 ID, and then make the association between them.
     
 ##### Example Request
 ```
-// Associate an E911 Address with a DID
-echo "Associate an E911 Address with a DID\n";
-$our_numbers = $client->getNumbers()->getAccountPhoneNumbers();
-$did_id = $our_numbers->data[0]->id;
-echo "Did id " . $did_id . "\n";
-$result = $client->getE911s()->associate_did($did_id, $detail_id);
-var_dump($result);
+var e911_number_association = e911s_controller.updateAssignAValidE911AddressToYourPhoneNumber(numberId=12065014286, 21907, callback)
+e911_number_association.then(function(response) {
+console.log("--Assign An E911 Address to a Phone Number")
+  console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 ##### Example Response
 
 On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
 
 ```
-Associate an E911 Address with a DID
-Did id 12062011682
+Assign an E911 Address to a Phone Number
 204 No Content
 ```
 
-#### list_dids_for_address($detail_id)
+#### listPhoneNumbersWithE911Record(e911Id, callback) 
 
-The function accepts an E911 record id as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-phone-numbers-associated-with-e911-record/). In the following example, we retrieve the list of phone numbers associated with our previously assigned `detail_id`.
+The function accepts `e911_id` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-phone-numbers-associated-with-e911-record/). In the following example, we retrieve the list of phone numbers associated with our previously declared E911 ID.
     
 ##### Example Request
 ```
-// List all DIDs associated with an E911 address
-echo "List all DIDs associated with an E911 Address\n";
-$result = $client->getE911s()->list_dids_for_address($detail_id);
-var_dump($result);
+var e911_numbers = e911s_controller.listPhoneNumbersWithE911Record(21907, callback);
+e911_numbers.then(function(response) {
+    console.log("--List Phone Numbers Associated with an E911 Record")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 ##### Example Response
 On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of related number objects in JSON format.
 ```
-List all DIDs associated with an E911 Address
+--List Phone Numbers Associated with an E911 Record
 {
   "data": [
     {
@@ -1158,42 +1160,47 @@ List all DIDs associated with an E911 Address
   }
 }
 ```
+#### deleteDeactivateE911ServiceForYourPhoneNumber(numberId, callback) 
 
-#### unassociate_did($did_id)
-
-The function accepts a phone number as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/deactivate-e911-service-for-phone-number/). In the following example, we deactivate the E911 service for our previously assigned `did_id`.
+The function accepts `number_id` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/deactivate-e911-service-for-phone-number/). In the following example, we deactivate the E911 service for our previously assigned phone number ID.
 
 ##### Example Request
 ```
-Un-associate an E911 Address from a DID
-echo "Un-associate an E911 Address from a DID\n";
-$result = $client->getE911s()->unassociate_did($did_id);
-var_dump($result);
+var deactivate_e911 = e911s_controller.deleteDeactivateE911ServiceForYourPhoneNumber(numberId=12062011682, callback)
+deactivate_e911.then(function(response) {
+    console.log("--Deactivate E911 Service for a Phone Number")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 ##### Example Response
 On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
 
 ```
-Un-associate an E911 Address from a DID
+--Deactivate E911 Service for a Phone Number
 204 No Content
 ```
-#### delete_address($detail_id)
+#### removeAnE911AddressFromYourAccount(e911Id, callback) 
 
-The function accepts an E911 record ID as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-e911-address-from-account/). Note that all phone number associations must be removed first before you are able to delete the specified `detail_id`. In the following example, we will attempt to delete the previously assigned `detail_id`.
+The function accepts `e911_id` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-e911-address-from-account/). Note that all phone number associations must be removed first before you are able to delete the specified E911 ID. In the following example, we will attempt to delete the previously assigned E911 ID.
 
 ##### Example Request
 ```
-// Delete an E911 Address
-echo "Delete an E911 Address\n";
-$result = $client->getE911s()->delete_address($detail_id);
-var_dump($result);
+var delete_e911 = e911s_controller.removeAnE911AddressFromYourAccount(numberId=12062011682, callback)
+delete_e911.then(function(response) {
+    console.log("--Delete E911 Record")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 
 ##### Example Response
 On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
 
 ```
-Delete an E911 Address
+--Delete E911 Record
 204 No Content
 ```
 
