@@ -1,7 +1,7 @@
 Flowroute Node.js Library v3
 =====================
 
-The Flowroute Node.js library v3 provides methods for interacting with [Numbers v2](https://developer.flowroute.com/api/numbers/v2.0/) and [Messages v2.1](https://developer.flowroute.com/api/messages/v2.1/) of the [Flowroute](https://www.flowroute.com) API.
+The Flowroute Node.js library v3 provides functions for interacting with [Numbers v2](https://developer.flowroute.com/api/numbers/v2.0/) and [Messages v2.1](https://developer.flowroute.com/api/messages/v2.1/) of the [Flowroute](https://www.flowroute.com) API.
 
 **Topics**
 
@@ -15,7 +15,7 @@ The Flowroute Node.js library v3 provides methods for interacting with [Numbers 
         * [E911s Controller](#e911scontroller)
         * [CNAMs Controller](#cnamscontroller)
     *   [Credentials](#credentials)
-    *   [Methods](#methods)
+    *   [Methods](#functions)
     *   [Errors](#errors)
 
 * * *
@@ -56,7 +56,7 @@ In Flowroute's approach to building the Node.js library v3, HTTP requests are ha
 
 ### NumbersController
 
-Contains all of the methods necessary to search through Flowroute's phone number inventory, purchase a phone number, and review details of your account phone numbers.
+Contains all of the functions necessary to search through Flowroute's phone number inventory, purchase a phone number, and review details of your account phone numbers.
 
 *   [listAvailableAreaCodes(options, callback)](#listavailableareacodes) \- Returns a list of all Numbering Plan Area (NPA) codes containing purchasable phone numbers. All request parameters are optional. If you don't specify a limit, results are limited to the first 10 items.
 *   [listAvailableExchangeCodes(options, callback)](#listavailableexchangecodes) \- Returns a list of all Central Office (exchange) codes containing purchasable phone numbers. All request parameters are optional.
@@ -67,16 +67,16 @@ Contains all of the methods necessary to search through Flowroute's phone number
 
 ### RoutesController
     
-Contains the methods required to create new inbound routes, view all of your account routes, and update primary and failover voice routes for your phone numbers.
+Contains the functions required to create new inbound routes, view all of your account routes, and update primary and failover voice routes for your phone numbers.
     
 *   [createAnInboundRoute(routeBody, callback)](#createaninboundrouteroutebody-callback) \- Creates a new inbound route which can then be assigned as either a primary or a failover voice route for a phone number on your account.
 *   [listInboundRoutes(options, callback)](#listinbounroutescallback) \- Returns a list of your inbound routes. From the list, you can then select routes to use as the primary and failover voice routes for phone numbers on your account.
-*   [updatePrimaryVoiceRouteForAPhoneNumber(updateprimaryvoicerouteforaphonenumbernumberid-routebody-callback)](#update_primary_voice_routenumber_id-route_body) \- Updates the primary voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` method.
-*   [updateFailoverVoiceRouteForAPhoneNumber(numberId, routeBody, callback)](#updatefailovervoicerouteforaphonenumbernumberid-routebody-callback) \- Updates the failover voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` method.
+*   [updatePrimaryVoiceRouteForAPhoneNumber(updateprimaryvoicerouteforaphonenumbernumberid-routebody-callback)](#update_primary_voice_routenumber_id-route_body) \- Updates the primary voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` function.
+*   [updateFailoverVoiceRouteForAPhoneNumber(numberId, routeBody, callback)](#updatefailovervoicerouteforaphonenumbernumberid-routebody-callback) \- Updates the failover voice route for a phone number. You must create the route first via the `create_an_inbound_route(routebody)` function.
 
 ###   MessagesController
     
-Contains the methods required to send an MMS or SMS, and review a specific Message Detail Record (MDR) or a set of messages.
+Contains the functions required to send an MMS or SMS, and review a specific Message Detail Record (MDR) or a set of messages.
     
 *   [sendAMessage(messageBody, callback)](#sendamessagemessagebody-callback) \- Sends an SMS or MMS from a Flowroute long code or toll-free phone number to another valid phone number.
 *   [look\_up\_a\_message\_detail\_record()](#lookupamessagedetailrecordmessageid) \- Searches for a specific message record ID and returns a Message Detail Record (in MDR2 format).
@@ -84,7 +84,7 @@ Contains the methods required to send an MMS or SMS, and review a specific Messa
 
 ### E911sController
 
-Contains all of the methods necessary to create, validate, update, and delete an E911 address on your account as well as assigning an E911 record to a phone number and if necessary, deactivating the E911 service for said phone number.
+Contains all of the functions necessary to create, validate, update, and delete an E911 address on your account as well as assigning an E911 record to a phone number and if necessary, deactivating the E911 service for said phone number.
 
 *   [createAndValidateANewE911Address(e911Address, callback)](#) \- Lets you create and validate an E911 address within the US and Canada which can then be assigned to any of the long code or toll-free numbers on your account. To assign an E911 address to your number, see "Assign a Valid E911 Address to Your Phone Number".
 *   [listAccountE911Addresses(options, callback)](#) \- Returns a list of all E911 records on your account by default. You can apply search filters using any of the optional query parameters.
@@ -98,7 +98,7 @@ Contains all of the methods necessary to create, validate, update, and delete an
 
 ### CNAMsController
 
-Contains all of the methods necessary to create, delete, assign and unassign CNAM records, as well as view and filter for specific CNAM records on your Flowroute account.
+Contains all of the functions necessary to create, delete, assign and unassign CNAM records, as well as view and filter for specific CNAM records on your Flowroute account.
 
 *   [createANewCNAMRecord(body, mContentType, callback)](#) \- Lets you create a Caller ID record for your account which can then be assigned to any of your long code numbers. To assign a CNAM record to your number, see "Assign a CNAM Record to a Phone Number".
 *   [listAccountCNAMRecords(options, callback)](#) \- Returns a list of all CNAM records on your account by default. You can apply search filters using any of the optional query parameters.
@@ -109,7 +109,7 @@ Contains all of the methods necessary to create, delete, assign and unassign CNA
 *   [deleteACNAMRecord(cnamId, callback)](#) \- Lets you delete a CNAM record from your account. This will automatically disassociate all numbers associated with this CNAM record.
 
 
-The following shows an example of a single Node.js file that imports the Flowroute API client and all the required modules. The Node.js library v3 comes with three demo files named after the API resources they interact with: **number_route_message_demo.js** for Numbers v2, Routes v2, and Messages v2.1, **e911_demo.js** for E911s v2, and **cnam_demo.js** for CNAMs v2. You can edit and run any of the demo files for testing purposes.
+The following shows **number_route_message_demo.js** as an example single file which imports the Flowroute API client and all the required modules. The Node.js library v3 comes with three demo files named after the API resources they interact with: **number_route_message_demo.js** for Numbers v2, Routes v2, and Messages v2.1, **e911_demo.js** for E911s v2, and **cnam_demo.js** for CNAMs v2. You can edit and run any of the demo files for testing purposes.
 
 ```node
 #!/usr/bin/env node
@@ -119,8 +119,8 @@ const flowroute = require('./lib');
 console.log("Number//Route Management v2 & Messaging v2.1 Demo");
 
 // Set up your api credentials and test mobile number for outbound SMS or MMS
-flowroute.Configuration.basicAuthUserName = process.env.FR_ACCESS_KEY
-flowroute.Configuration.basicAuthPassword = process.env.FR_SECRET_KEY
+flowroute.Configuration.username = process.env.FR_ACCESS_KEY
+flowroute.Configuration.password = process.env.FR_SECRET_KEY
 mobile_number = process.env.MOBILE_NUMBER
 
 // Instantiate API client and create controllers for Numbers, Messages, and Routes
@@ -160,7 +160,7 @@ The Flowroute Node.js library v3  allows you to make HTTP requests to the `numbe
 
 #### listAvailableAreaCodes()
 
-The method accepts `limit`, `offset`, `max_setup_cost`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-available-area-codes/).
+The function accepts `limit`, `offset`, `max_setup_cost`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-available-area-codes/).
     
 ##### Example Request
 ```node
@@ -203,96 +203,6 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
     {
       "type": "areacode",
       "id": "203",
-      "links": {
-
-
-The following shows an example of a single Node.js file that imports the Flowroute API client and all the required modules. The Node.js library v3 comes with three demo files named after the API resources they interact with: **number_route_message_demo.js** for Numbers v2, Routes v2, and Messages v2.1, **e911_demo.js** for E911s v2, and **cnam_demo.js** for CNAMs v2. You can edit and run any of the demo files for testing purposes.
-
-```node
-#!/usr/bin/env node
-require('dotenv').config();
-const flowroute = require('./lib');
-
-console.log("Number//Route Management v2 & Messaging v2.1 Demo");
-
-// Set up your api credentials and test mobile number for outbound SMS or MMS
-flowroute.Configuration.basicAuthUserName = process.env.FR_ACCESS_KEY
-flowroute.Configuration.basicAuthPassword = process.env.FR_SECRET_KEY
-mobile_number = process.env.MOBILE_NUMBER
-
-// Instantiate API client and create controllers for Numbers, Messages, and Routes
-var numbers_controller = flowroute.NumbersController;
-var routes_controller = flowroute.RoutesController;
-var messages_controller = flowroute.MessagesController;
-```    
-
-#### Credentials
-
-As an example, we will be referencing the **number_route_message_demo.js** file. First, open up the file with your preferred code editor and replace `flowroute.Configuration.username` with your API Access Key and `flowroute.Configuration.password` with your API Secret Key from the [Flowroute Manager](https://manage.flowroute.com/accounts/preferences/api/). Note that in our example, we are accessing your Flowroute credentials as environment variables set in a `.env` file. This library should come with a configuration `.env` file that you can modify with your credentials and your mobile number for testing. To learn more about setting environment variables, see [How To Read and Set Environmental and Shell Variables](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps).
-
-```node
-// Set up your api credentials and test mobile number for outbound SMS or MMS
-flowroute.Configuration.username = process.env.FR_ACCESS_KEY
-flowroute.Configuration.password = process.env.FR_SECRET_KEY
-mobile_number = process.env.MOBILE_NUMBER
-```
-
-#### Instantiate API Client and Controllers
-Next, instantiate the API Client and its controllers.
-
-```node
-// Instantiate API client and create controllers for Numbers, Messages, and Routes
-const flowroute = require('./lib');
-var numbers_controller = flowroute.NumbersController;
-var routes_controller = flowroute.RoutesController;
-var messages_controller = flowroute.MessagesController;
-```
-
-## Methods
-The following section will demonstrate the capabilities of Numbers v2, Routes v2, Messages v2.1, E911s v2, and CNAMs v2 that are wrapped in the Flowroute Node.js Library v3. Note that the example responses have been formatted using Mac's `pbpaste` and `jq`. To learn more, see [Quickly Tidy Up JSON from the Command Line](http://onebigfunction.com/vim/2015/02/02/quickly-tidying-up-json-from-the-command-line-and-vim/). 
-
-### Number Management
-
-The Flowroute Node.js library v3  allows you to make HTTP requests to the `numbers` resource of Flowroute API v2: `https://api.flowroute.com/v2/numbers`
-
-#### listAvailableAreaCodes()
-
-The method accepts `limit`, `offset`, `max_setup_cost`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-available-area-codes/).
-    
-##### Example Request
-```node
-var max_setup_cost = 3.25;
-var limit = 3;
-var offset = 0;
-
-var callback = function(error, response, context){}
-
-areacodes = numbers_controller.listAvailableAreaCodes(limit, offset, max_setup_cost, callback);
-areacodes.then(function(response) {
-  console.log("--List Available Area Codes")
-  console.log(response);
-}, function(err) {
-  console.log(err);
-});
-```
-
-##### Example Response
-
-On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of area code objects in JSON format.
-
-```
-{
-  "data": [
-    {
-      "type": "areacode",
-      "id": "201",
-      "links": {
-        "related": "https://api.flowroute.com/v2/numbers/available/exchanges?areacode=201"
-      }
-    },
-    {
-      "type": "areacode",
-      "id": "202",
       "links": {
         "related": "https://api.flowroute.com/v2/numbers/available/exchanges?areacode=202"
       }
@@ -314,7 +224,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### listAvailableExchangeCodes()
 
-The method accepts `limit`, `offset`, `max_setup_cost`, `areacode`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-available-exchanges/). 
+The function accepts `limit`, `offset`, `max_setup_cost`, `areacode`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-available-exchanges/). 
 
 ##### Example Request
 ```node
@@ -366,10 +276,10 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### searchForPurchasablePhoneNumbers()
 
-The method accepts `starts_with`, `contains`, `ends_with`, `limit`, `offset`, `rate_center`, `state`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/search-for-purchasable-phone-numbers/).
+The function accepts `starts_with`, `contains`, `ends_with`, `limit`, `offset`, `rate_center`, `state`, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/search-for-purchasable-phone-numbers/).
 
 ##### Example Request
-```node
+```
 var starts_with = 206
 var contains = 3
 var ends_with = 7
@@ -446,9 +356,9 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### purchaseAPhoneNumber(numberID)
 
-The method is used to purchase a telephone number from Flowroute's inventory and accepts the phone number `id` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/purchase-a-phone-number/). In the following example, we assign the `id` of the first phone number in the resulting JSON array as the phone number to be purchased. Note that this function call is currently commented out. Uncomment to test the `purchaseAPhoneNumber` method.
+The function is used to purchase a telephone number from Flowroute's inventory and accepts the phone number `id` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/purchase-a-phone-number/). In the following example, we assign the `id` of the first phone number in the resulting JSON array as the phone number to be purchased. Note that this function call is currently commented out. Uncomment to test the `purchaseAPhoneNumber` method.
 ##### Example Request
-```node
+```
 var numberID = 12065014377
 ppnumbers = numbers_controller.purchaseAPhoneNumber(numberID, callback)
 ppnumbers.then(function(response) {
@@ -519,7 +429,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### getAccountPhoneNumbers()
 
-The method accepts `starts_with`, `ends_with`, `contains`, `limit`, `offset` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-phone-numbers/). 
+The function accepts `starts_with`, `ends_with`, `contains`, `limit`, `offset` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-phone-numbers/). 
     
 
 ##### Example Request
@@ -579,7 +489,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### getPhoneNumberDetails(numberId, callback)
 
-The method accepts the `numberID` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-phone-number-details/). In the following example, we request the details of the first phone number returned after calling the `list_account_phone_numbers` method.
+The function accepts the `numberID` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-phone-number-details/). In the following example, we request the details of the first phone number returned after calling the `list_account_phone_numbers` method.
 
 ##### Example Request
 ```node
@@ -656,7 +566,7 @@ The Flowroute Node.js library v3 allows you to make HTTP requests to the `routes
     
 #### createAnInboundRoute(routeBody, callback)
 
-The method accepts the route object in JSON format and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/create-an-inbound-route/). 
+The function accepts the route object in JSON format and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/create-an-inbound-route/). 
 
 ##### Example Request
 ```node
@@ -688,7 +598,7 @@ On success, the HTTP status code in the response header is `201 Created` and the
 ```
 #### listInbounRoutes(callback)
 
-The method accepts `limit`, `offset` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-inbound-routes/).
+The function accepts `limit`, `offset` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-inbound-routes/).
 
 ##### Example Request
 ```node
@@ -743,7 +653,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### updatePrimaryVoiceRouteForAPhoneNumber(numberId, routeBody, callback)
 
-The method accepts a phone number `id`, a route record object in JSON format, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-number-primary-voice-route/). 
+The function accepts a phone number `id`, a route record object in JSON format, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-number-primary-voice-route/). 
 
 ##### Example Request
 ```node
@@ -760,7 +670,7 @@ On success, the HTTP status code in the response header is `204 No Content` whic
 
 #### updateFailoverVoiceRouteForAPhoneNumber(numberId, routeBody, callback)
 
-The method accepts a phone number `id`, a route record object in JSON format, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-number-failover-voice-route/). 
+The function accepts a phone number `id`, a route record object in JSON format, and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-number-failover-voice-route/). 
 
 ##### Example Request
 ```node
@@ -779,14 +689,14 @@ The Flowroute Node.js library v3 allows you to make HTTP requests to the `messag
 
 #### sendAMessage(messageBody, callback)
 
-The method accepts a message object in JSON format and `callback` as parameters which you can learn more about in the API References for [MMS](https://developer.flowroute.com/api/messages/v2.1/send-an-mms/) and [SMS](https://developer.flowroute.com/api/messages/v2.1/send-an-sms/). In the following example, we are sending an MMS with a `gif` attachment from the previously declared `number_id` to your mobile number. 
+The function accepts a message object in JSON format and `callback` as parameters which you can learn more about in the API References for [MMS](https://developer.flowroute.com/api/messages/v2.1/send-an-mms/) and [SMS](https://developer.flowroute.com/api/messages/v2.1/send-an-sms/). In the following example, we are sending an MMS with a `gif` attachment from the previously declared `number_id` to your mobile number. 
 
 ##### Example Request
 ```node
 console.log ("---Send A Message")
 pprint.pprint(result)
 ```
-Note that this function call is currently commented out. Uncomment to test the `send_a_message` method.
+Note that this function call is currently commented out. Uncomment to test the `send_a_message` function.
 
 ##### Example Response
 
@@ -807,7 +717,7 @@ On success, the HTTP status code in the response header is `202 Accepted` and th
 
 #### lookUpASetofMessages(startDate, callback)
 
-The method accepts `start_date`, `end_date`, `limit`, `offset`, and `callback` as parameters which you can learn more about in the [API Reference](https://developer.flowroute.com/api/messages/v2.1/look-up-set-of-messages/).
+The function accepts `start_date`, `end_date`, `limit`, `offset`, and `callback` as parameters which you can learn more about in the [API Reference](https://developer.flowroute.com/api/messages/v2.1/look-up-set-of-messages/).
 
 ##### Example Request
 ```node
@@ -889,7 +799,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### lookUpAMessageDetailRecord(messageId)
 
-The method accepts a message `id` in MDR2 format and `callback` as parameters which you can learn more about in the [API Reference](https://developer.flowroute.com/api/messages/v2.1/look-up-a-message-detail-record/). 
+The function accepts a message `id` in MDR2 format and `callback` as parameters which you can learn more about in the [API Reference](https://developer.flowroute.com/api/messages/v2.1/look-up-a-message-detail-record/). 
 ##### Example Request
 ```node
 message_id = result['data'][0]['id']
@@ -922,9 +832,636 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
   }
 }
 ```
+
+### E911 Address Management
+The Flowroute Node.js library v3 allows you to make HTTP requests to the `e911s` resource of Flowroute API v2: `https://api.flowroute.com/v2/e911s`
+
+#### listAccountE911Addresses(options, callback)
+
+The function accepts `limit`, `offset`, `state` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-e911-addresses/). 
+
+##### Example Request
+```
+var e911_addresses = e911s_controller.listAccountE911Addresses(limit=3, offset=null, state="WA", callback);
+e911_addresses.then(function(response) {
+  console.log("--List Account E911 Addresses")
+  console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
+```
+
+##### Example Response
+
+On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of e911 objects in JSON format. Note that this demo function iterates through all the E911 records on your account filtered by the parameters that you specify. The following example response has been clipped for brevity's sake.
+
+```
+--List Account E911 Addresses
+{
+  "data": [
+    {
+      "attributes": {
+        "address_type": "",
+        "address_type_number": "",
+        "city": "Seattle",
+        "country": "US",
+        "first_name": "Death",
+        "label": "Funeral Homes",
+        "last_name": "Crow",
+        "state": "WA",
+        "street_name": "Smith St",
+        "street_number": "123",
+        "zip": "98101"
+      },
+      "id": "22127",
+      "links": {
+        "self": "https://api.flowroute.com/v2/e911s/22127"
+      },
+      "type": "e911"
+    },
+    {
+      "attributes": {
+        "address_type": "",
+        "address_type_number": "",
+        "city": "Seattle",
+        "country": "US",
+        "first_name": "Jim",
+        "label": "Smith Tower",
+        "last_name": "Law",
+        "state": "WA",
+        "street_name": "Smith St",
+        "street_number": "123",
+        "zip": "98101"
+      },
+      "id": "22124",
+      "links": {
+        "self": "https://api.flowroute.com/v2/e911s/22124"
+      },
+      "type": "e911"
+    },
+    {
+      "attributes": {
+        "address_type": "",
+        "address_type_number": "",
+        "city": "Seattle",
+        "country": "US",
+        "first_name": "Bob",
+        "label": "First e911 record",
+        "last_name": "Law",
+        "state": "WA",
+        "street_name": "Smith St",
+        "street_number": "123",
+        "zip": "98101"
+      },
+      "id": "22120",
+      "links": {
+        "self": "https://api.flowroute.com/v2/e911s/22120"
+      },
+      "type": "e911"
+    }
+  ],
+  "links": {
+    "next": "https://api.flowroute.com/v2/e911s?state=WA&limit=3&offset=3",
+    "self": "https://api.flowroute.com/v2/e911s?state=WA&limit=3&offset=0"
+  }
+}
+```
+#### listE911RecordDetails(e911ID, callback) 
+
+The function accepts an `e911_id` and `callback` as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-e911-record-details/). The value that gets assigned to `e911_id` is the first resulting item of the returned array from the `listAccountE911Addresses` function call.
+
+##### Example Request
+```
+var e911_address_details = e911s_controller.listE911RecordDetails(21845, callback);
+e911_address_details.then(function(response) {
+  console.log("--List E911 Record Details")
+  console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
+```
+##### Example Response
+
+On success, the HTTP status code in the response header is `200 OK` and the response body contains a detailed e911 object in JSON format. 
+
+```
+--List E911 Record Details
+{
+  "data": {
+    "attributes": {
+      "address_type": "Suite",
+      "address_type_number": "333",
+      "city": "Seattle",
+      "country": "US",
+      "first_name": "Albus",
+      "label": "Office Space III",
+      "last_name": "Rasputin, Jr.",
+      "state": "WA",
+      "street_name": "Main St",
+      "street_number": "666",
+      "zip": "98101"
+    },
+    "id": "21845",
+    "links": {
+      "self": "https://api.flowroute.com/v2/e911s/21845"
+    },
+    "type": "e911"
+  }
+}
+```
+
+#### createValidateAnE911Address(e911Address, callback) 
+
+In the following example request, we instantiate `e911address` as an `E911Address` JSON body, directly initializing its different data attributes with example values. An `E911Address` object can have `label`, `first_name`, `last_name`, `street_name`, `street_number`, `address_type`, `address_type_number`, `city`, `state`, `country`, and `zipcode`. Learn more about the different body parameters in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-e911-addresses/). We then pass `e911address` as a parameter for the `createValidateAnE911Address` function.
+
+    
+##### Example Request
+```
+var e911address = {"data":{"type": "e911", "attributes":{"label":"Belfry Oddities II", "first_name": "Jim", "last_name": "Law", "street_number": "123", "street_name": "Smith St", "address_type":"Apartment", "address_type_number": "666", "city": "Seattle", "state": "WA", "country": "US", "zip": "98101"}}};
+var validate_address = e911s_controller.createValidateAnE911Address(e911address, callback);
+validate_address.then(function(response) {
+  console.log("--Validate an E911 Address")
+  console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
+```
+
+##### Example Response
+
+On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content. On error, a printable representation of the detailed API response is displayed.
+
+```
+["rawBody":"FlowrouteNumbersAndMessagingLib\Http\HttpResponse":private]=>
+  string(171)
+"{
+  "errors": [
+    {
+      "detail": {
+        "data": {
+          "attributes": {
+            "zip": [
+              "ZIP code must be at least 4 and at most 7 digits long"
+            ]
+          }
+        }
+      },
+      "id": "15eb464e-d717-49e2-a6cc-e97af67c1930",
+      "status": 422
+    }
+  ]
+}
+"
+```
+#### createAndValidateANewE911Address(e911address, callback)
+
+The function accepts an E911 object with its different attributes as a parameter. Learn more about the different E911 attributes in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/create-and-validate-new-e911-address/). In the following example request, we pass our previously validated `E911Address` JSON data, `e911address`, as a parameter to the `createAndValidateANewE911Address` function.
+    
+##### Example Request
+```
+echo "--Create an E911 Address\n";
+$result = $client-&gt;getE911s()-&gt;create&gt;address($body);
+var_dump($result);
+```
+
+##### Example Response
+
+On success, the HTTP status code in the response header is `201 Created` and the response body contains the newly created e911 object in JSON format. On error, a printable representation of the detailed API response is displayed.
+
+```
+--Create an E911 Address
+{
+  "data": {
+    "attributes": {
+      "address_type": "Apartment",
+      "address_type_number": "601",
+      "city": "Tacoma",
+      "country": "US",
+      "first_name": "Dan",
+      "label": "Home",
+      "last_name": "Smith",
+      "state": "WA",
+      "street_name": "N Vassault",
+      "street_number": "3901",
+      "zip": "98407"
+    },
+    "id": "21907",
+    "links": {
+      "self": "https://api.flowroute.com/v2/e911s/21907"
+    },
+    "type": "e911"
+  }
+}
+```
+#### update_address($e911_object, $detail_id)
+
+The function accepts an E911 object and an E911 record ID. Learn more about the different E911 attributes that you can update in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/update-and-validate-existing-e911-address/). In the following example, we will retrieve the record ID of our newly created E911 address and assign it to a variable, `detail_id`. We then update the `label` of our selected E911 address to "Work".
+    
+##### Example Request
+```
+$detail_id = $result->body->data->id;
+
+// Update an E911 Address
+echo "Update an E911 Address\n";
+$body->attributes->label = 'Work';
+$result = $client->getE911s()->update_address($body, $detail_id);
+var_dump($result);
+```
+##### Example Response
+On success, the HTTP status code in the response header is `200 OK` and the response body contains the newly updated e911 object in JSON format. On error, a printable representation of the detailed API response is displayed.
+
+```
+{
+  "data": {
+    "attributes": {
+      "city": "Tacoma",
+      "country": "US",
+      "first_name": "Dan",
+      "label": "Work",
+      "last_name": "Smith",
+      "state": "WA",
+      "street_name": "N Vassault",
+      "street_number": "3901",
+      "zip": "98407"
+    },
+    "id": "21907",
+    "links": {
+      "self": "https://api.flowroute.com/v2/e911s/21907"
+    },
+    "type": "e911"
+  }
+}
+```
+
+#### associate_did($did_id, $detail_id)
+
+The function accepts a phone number and an E911 record ID as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-valid-e911-address-to-phone-number/). In the following example, we call the [getAccountPhoneNumbers](#getnumbersclient) function covered under Number Management to extract the value of the first item in the returned JSON array into variable `did_id`, pass our previously declared `detail_id` for the E911 record ID, and then make the association between them.
+    
+##### Example Request
+```
+// Associate an E911 Address with a DID
+echo "Associate an E911 Address with a DID\n";
+$our_numbers = $client->getNumbers()->getAccountPhoneNumbers();
+$did_id = $our_numbers->data[0]->id;
+echo "Did id " . $did_id . "\n";
+$result = $client->getE911s()->associate_did($did_id, $detail_id);
+var_dump($result);
+```
+##### Example Response
+
+On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
+
+```
+Associate an E911 Address with a DID
+Did id 12062011682
+204 No Content
+```
+
+#### list_dids_for_address($detail_id)
+
+The function accepts an E911 record id as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-phone-numbers-associated-with-e911-record/). In the following example, we retrieve the list of phone numbers associated with our previously assigned `detail_id`.
+    
+##### Example Request
+```
+// List all DIDs associated with an E911 address
+echo "List all DIDs associated with an E911 Address\n";
+$result = $client->getE911s()->list_dids_for_address($detail_id);
+var_dump($result);
+```
+##### Example Response
+On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of related number objects in JSON format.
+```
+List all DIDs associated with an E911 Address
+{
+  "data": [
+    {
+      "attributes": {
+        "alias": null,
+        "value": "12062011682"
+      },
+      "id": "12062011682",
+      "links": {
+        "self": "https://api.flowroute.com/v2/numbers/12062011682"
+      },
+      "type": "number"
+    }
+  ],
+  "links": {
+    "self": "https://api.flowroute.com/v2/e911s/21907/relationships/numbers?limit=10&offset=0"
+  }
+}
+```
+
+#### unassociate_did($did_id)
+
+The function accepts a phone number as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/deactivate-e911-service-for-phone-number/). In the following example, we deactivate the E911 service for our previously assigned `did_id`.
+
+##### Example Request
+```
+Un-associate an E911 Address from a DID
+echo "Un-associate an E911 Address from a DID\n";
+$result = $client->getE911s()->unassociate_did($did_id);
+var_dump($result);
+```
+##### Example Response
+On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
+
+```
+Un-associate an E911 Address from a DID
+204 No Content
+```
+#### delete_address($detail_id)
+
+The function accepts an E911 record ID as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-e911-address-from-account/). Note that all phone number associations must be removed first before you are able to delete the specified `detail_id`. In the following example, we will attempt to delete the previously assigned `detail_id`.
+
+##### Example Request
+```
+// Delete an E911 Address
+echo "Delete an E911 Address\n";
+$result = $client->getE911s()->delete_address($detail_id);
+var_dump($result);
+```
+
+##### Example Response
+On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
+
+```
+Delete an E911 Address
+204 No Content
+```
+
+### CNAM Record Management
+
+The Flowroute PHP Library v3 allows you to make HTTP requests to the `cnams` resource of Flowroute API v2: `https://api.flowroute.com/v2/cnams`.
+
+All of the CNAM record management functions are encapsulated in `cnam_demo.php`.
+
+| API Reference Pages |
+| ------------------- |
+| The E911 and CNAM API reference pages are currently restricted to our beta customers, which means that all API reference links below currently return a `404 Not Found`. They will be publicly available during our E911 and CNAM APIs GA launch in a few weeks. |
+
+#### GetCNAMs($client, approval_status)
+
+The function accepts a client object and all the different CNAM query parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-cnam-records/). In the following example request, we will only retrieve approved CNAM records. Note that this demo function iterates through all the CNAM records on your account filtered by the parameters that you specify. The following example response has been clipped for brevity's sake.
+    
+##### Function Declaration
+```
+function GetCNAMs($client, $is_approved=False, $startsWith=NULL,
+                  $endsWith=NULL, $contains=NULL, $limit=10, $offset=0)
+{
+    $return_list = array();
+    // User the CNAM Controller from our Client
+    $cnams = $client->getCNAMS();
+    do
+    {
+        $cnam_data = $cnams->listCNAMs($limit, $offset, $is_approved,
+                                       $startsWith, $contains, $endsWith);
+        // Iterate through each number item
+        foreach ($cnam_data as $entry)
+        {
+            foreach ($entry as $item) {
+                echo "---------------------------\nCNAM Records:\n";
+                var_dump($item);
+                $return_list[] = $item;
+            }
+        }
+
+        // See if there is more data to process
+        $links = $cnam_data->links;
+        if (isset($links->next))
+        {
+            // more data to pull
+            $offset += $limit;
+        }
+        else
+        {
+            break;   // no more data
+        }
+    } while (true);
+
+    return $return_list;
+}
+```
+##### Example Request
+```
+echo "Listing only Approved CNAM Records";
+// List approved CNAM records
+$our_cnams = GetCNAMs($client, True);
+
+if (count($our_cnams) == 0)
+{
+    echo "No currently approved CNAM records. This is as far as the demo can run until you have some records ready for use.";
+    exit();
+}
+```
+
+##### Example Response
+
+On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of cnam objects in JSON format.
+
+```
+Listing only Approved CNAM Records
+{'data': [{'attributes': {'approval_datetime': None,
+                          'creation_datetime': None,
+                          'is_approved': True,
+                          'rejection_reason': '',
+                          'value': 'TEST, MARIA'},
+           'id': '17604',
+           'links': {'self': 'https://api.flowroute.com/v2/cnams/17604'},
+           'type': 'cnam'},
+          {'attributes': {'approval_datetime': '2018-04-16 '
+                                               '16:20:32.939166+00:00',
+                          'creation_datetime': '2018-04-12 '
+                                               '19:08:39.062539+00:00',
+                          'is_approved': True,
+                          'rejection_reason': None,
+                          'value': 'REGENCE INC'},
+           'id': '22671',
+           'links': {'self': 'https://api.flowroute.com/v2/cnams/22671'},
+           'type': 'cnam'},
+          {'attributes': {'approval_datetime': '2018-04-23 '
+                                               '17:04:30.829341+00:00',
+                          'creation_datetime': '2018-04-19 '
+                                               '21:03:04.932192+00:00',
+                          'is_approved': True,
+                          'rejection_reason': None,
+                          'value': 'BROWN BAG'},
+           'id': '22790',
+           'links': {'self': 'https://api.flowroute.com/v2/cnams/22790'},
+           'type': 'cnam'},
+          {'attributes': {'approval_datetime': '2018-05-23 '
+                                               '18:58:46.052602+00:00',
+                          'creation_datetime': '2018-05-22 '
+                                               '23:38:27.794911+00:00',
+                          'is_approved': True,
+                          'rejection_reason': None,
+                          'value': 'LEATHER REBEL'},
+           'id': '23221',
+           'links': {'self': 'https://api.flowroute.com/v2/cnams/23221'},
+           'type': 'cnam'},
+          {'attributes': {'approval_datetime': '2018-05-23 '
+                                               '18:58:46.052602+00:00',
+                          'creation_datetime': '2018-05-22 '
+                                               '23:39:24.447054+00:00',
+                          'is_approved': True,
+                          'rejection_reason': None,
+                          'value': 'LEATHER REBELZ'},
+           'id': '23223',
+           'links': {'self': 'https://api.flowroute.com/v2/cnams/23223'},
+           'type': 'cnam'},
+          {'attributes': {'approval_datetime': '2018-05-23 '
+                                               '18:58:46.052602+00:00',
+                          'creation_datetime': '2018-05-22 '
+                                               '23:42:00.786818+00:00',
+                          'is_approved': True,
+                          'rejection_reason': None,
+                          'value': 'MORBO'},
+           'id': '23224',
+           'links': {'self': 'https://api.flowroute.com/v2/cnams/23224'},
+           'type': 'cnam'}],
+ 'links': {'self': 'https://api.flowroute.com/v2/cnams?limit=10&offset=0'}}
+```
+#### get_cnam($cnam_id)
+
+The function accepts a CNAM record ID as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-cnam-record-details/). In the following example, we query for approved CNAM records on your account and then extract the ID of the first record returned and retrieve the details of that specific CNAM record. 
+    
+##### Example Request
+```
+// CNAM Details
+echo "List CNAM Details " . $our_cnams[0]->id . "\n";
+$result = $client->getCNAMS()->getCNAMdetails($our_cnams[0]->id);
+var_dump($result);
+```
+##### Example Response
+
+On success, the HTTP status code in the response header is `200 OK` and the response body contains a detailed cnam object in JSON format.
+
+```
+List CNAM Details 17604
+{'data': {'attributes': {'approval_datetime': None,
+                         'creation_datetime': None,
+                         'is_approved': True,
+                         'rejection_reason': '',
+                         'value': 'TEST, MARIA'},
+          'id': '17604',
+          'links': {'self': 'https://api.flowroute.com/v2/cnams/17604'},
+          'type': 'cnam'}}
+```
+#### create_cnam_record($cnam_value)
+
+The function accepts a Caller ID value as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/create-a-new-cnam-record/). In the following example, we include a `generateRandomString` function to generate a four-character random string which we will concatenate with Flowroute and assign as our CNAM value. Note that you can enter up to 15 characters for your CNAM value.
+    
+##### Example Request
+```
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+
+// Create a CNAM Record
+$cnam_value = 'Flowroute' . generateRandomString(4);
+$new_record = $client->getCNAMS()->createCNAM($cnam_value);
+var_dump($new_record);
+```
+
+##### Example Response
+
+On success, the HTTP status code in the response header is `201 Created` and the response body contains the newly created cnam object in JSON format. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record creation then prompts you to press "Enter". Afterwards, you should see a message on the limitation around CNAM record and phone number association.
+
+```
+{
+  "data": {
+    "attributes": {
+      "approval_datetime": null,
+      "creation_datetime": "2018-06-27 20:44:01.543801+00:00",
+      "is_approved": false,
+      "rejection_reason": null,
+      "value": "FLOWROUTEVMKM"
+    },
+    "id": "23922",
+    "links": {
+      "self": "https://api.flowroute.com/v2/cnams/23922"
+    },
+    "type": "cnam"
+  }
+}
+New Record Created - Please press Enter to continue.
+
+CNAM Records cannot be associated with DIDs until they have been approved.  Typically within 24 hours.
+```
+#### associate_cnam($cnam_id, $did)
+
+The function accepts a CNAM record ID and a phone number as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-cnam-record-to-phone-number/). In the following example, we will call `getNumbers()` and `getCNAMs()` then associate the first number with the first CNAM record in the resulting numbers and CNAMs arrays. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record association with the phone number and prompts you to press "Enter" to continue.
+    
+##### Example Request
+```
+$cnam_value = $our_cnams[0]->attributes->value;
+$cnam_id =  $our_cnams[0]->id;
+echo "CNAM ID " . $cnam_id . "\n";
+echo "DID ID " . $did . "\n";
+$result = $client->getCNAMS()->associateCNAM($cnam_id, $did);
+var_dump($result);
+
+wait_for_user("New Record Associated");
+```
+
+##### Example Response
+On success, the HTTP status code in the response header is `202 Accepted` and the response body contains an attributes dictionary containing the `date_created` field and the assigned cnam object in JSON format. This request will fail if the CNAM you are trying to associate has not yet been approved.
+```
+CNAM ID 22790
+DID ID 12062011682
+{'data': {'attributes': {'date_created': 'Fri, 01 Jun 2018 00:17:52 GMT'},
+          'id': 22790,
+          'type': 'cnam'}}
+New Record Associated - Please press Enter to continue.
+```
+#### unassociate_cnam($number_id)
+
+The function accepts a phone number as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/unassign-a-cnam-record-from-phone-number/). In the following example, we will disassociate the same phone number that we've used in `associate_cnam()`. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record disassociation from the phone number and prompts you to press "Enter" to continue.
+    
+##### Example Request
+```
+// Un-associate the new CNAM Record from our DID
+$did = $ourDIDs[0]->id;
+$result = $client->getCNAMS()->unassociateCNAM($did);
+var_dump($result);
+```
+##### Example Response
+On success, the HTTP status code in the response header is `202 Accepted` and the response body contains an attributes object with the date the CNAM was requested to be deleted, and the updated cnam object in JSON format. 
+
+```
+{'data': {'attributes': {'date_created': 'Wed, 27 Jun 2018 20:59:36 GMT'},
+          'id': None,
+          'type': 'cnam'}}
+New Record Unassociated - Please press Enter to continue.
+```
+#### remove_cnam($cnam_id)
+
+The function accepts a CNAM record ID as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-cnam-record-from-account/). In the following example, we will be deleting our previously extracted `cnam_id` from the "List Approved CNAM Records" function call. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record deletion and prompts you to press "Enter" to continue.
+    
+##### Example Request
+```
+// Delete the CNAM Record used
+$result = $client->getCNAMS()->deleteCNAM($cnam_id);
+var_dump($result);
+```
+
+##### Example Response
+On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
+
+```
+204 No Content
+New Record Deleted - Please press Enter to continue.
+```
+
 #### Errors
 
-In cases of method errors, the Node.js library raises an exception which includes an error message, and the HTTP body that was received in the request. 
+In cases of function errors, the Node.js library raises an exception which includes an error message, and the HTTP body that was received in the request. 
 
 ##### Example Error
 ```
