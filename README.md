@@ -1206,271 +1206,237 @@ On success, the HTTP status code in the response header is `204 No Content` whic
 
 ### CNAM Record Management
 
-The Flowroute PHP Library v3 allows you to make HTTP requests to the `cnams` resource of Flowroute API v2: `https://api.flowroute.com/v2/cnams`.
+The Flowroute Node.js Library v3 allows you to make HTTP requests to the `cnams` resource of Flowroute API v2: `https://api.flowroute.com/v2/cnams`.
 
-All of the CNAM record management functions are encapsulated in `cnam_demo.php`.
+All of the CNAM record management functions are encapsulated in `cnam_demo.js`.
 
 | API Reference Pages |
 | ------------------- |
 | The E911 and CNAM API reference pages are currently restricted to our beta customers, which means that all API reference links below currently return a `404 Not Found`. They will be publicly available during our E911 and CNAM APIs GA launch in a few weeks. |
 
-#### GetCNAMs($client, approval_status)
+#### listAccountCNAMRecords(options, callback) 
 
-The function accepts a client object and all the different CNAM query parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-cnam-records/). In the following example request, we will only retrieve approved CNAM records. Note that this demo function iterates through all the CNAM records on your account filtered by the parameters that you specify. The following example response has been clipped for brevity's sake.
+The function accepts a callback function and all the different CNAM query parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-cnam-records/). In the following example request, we will only retrieve 3 approved CNAM records. 
     
-##### Function Declaration
-```
-function GetCNAMs($client, $is_approved=False, $startsWith=NULL,
-                  $endsWith=NULL, $contains=NULL, $limit=10, $offset=0)
-{
-    $return_list = array();
-    // User the CNAM Controller from our Client
-    $cnams = $client->getCNAMS();
-    do
-    {
-        $cnam_data = $cnams->listCNAMs($limit, $offset, $is_approved,
-                                       $startsWith, $contains, $endsWith);
-        // Iterate through each number item
-        foreach ($cnam_data as $entry)
-        {
-            foreach ($entry as $item) {
-                echo "---------------------------\nCNAM Records:\n";
-                var_dump($item);
-                $return_list[] = $item;
-            }
-        }
-
-        // See if there is more data to process
-        $links = $cnam_data->links;
-        if (isset($links->next))
-        {
-            // more data to pull
-            $offset += $limit;
-        }
-        else
-        {
-            break;   // no more data
-        }
-    } while (true);
-
-    return $return_list;
-}
-```
 ##### Example Request
 ```
-echo "Listing only Approved CNAM Records";
-// List approved CNAM records
-$our_cnams = GetCNAMs($client, True);
-
-if (count($our_cnams) == 0)
-{
-    echo "No currently approved CNAM records. This is as far as the demo can run until you have some records ready for use.";
-    exit();
-}
+var account_cnams = cnams_controller.listAccountCNAMRecords(limit=3, offset=null, isApproved=true, callback);
+account_cnams.then(function(response) {
+    console.log("--List Approved CNAM Records")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
-
 ##### Example Response
 
 On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of cnam objects in JSON format.
 
 ```
-Listing only Approved CNAM Records
-{'data': [{'attributes': {'approval_datetime': None,
-                          'creation_datetime': None,
-                          'is_approved': True,
-                          'rejection_reason': '',
-                          'value': 'TEST, MARIA'},
-           'id': '17604',
-           'links': {'self': 'https://api.flowroute.com/v2/cnams/17604'},
-           'type': 'cnam'},
-          {'attributes': {'approval_datetime': '2018-04-16 '
-                                               '16:20:32.939166+00:00',
-                          'creation_datetime': '2018-04-12 '
-                                               '19:08:39.062539+00:00',
-                          'is_approved': True,
-                          'rejection_reason': None,
-                          'value': 'REGENCE INC'},
-           'id': '22671',
-           'links': {'self': 'https://api.flowroute.com/v2/cnams/22671'},
-           'type': 'cnam'},
-          {'attributes': {'approval_datetime': '2018-04-23 '
-                                               '17:04:30.829341+00:00',
-                          'creation_datetime': '2018-04-19 '
-                                               '21:03:04.932192+00:00',
-                          'is_approved': True,
-                          'rejection_reason': None,
-                          'value': 'BROWN BAG'},
-           'id': '22790',
-           'links': {'self': 'https://api.flowroute.com/v2/cnams/22790'},
-           'type': 'cnam'},
-          {'attributes': {'approval_datetime': '2018-05-23 '
-                                               '18:58:46.052602+00:00',
-                          'creation_datetime': '2018-05-22 '
-                                               '23:38:27.794911+00:00',
-                          'is_approved': True,
-                          'rejection_reason': None,
-                          'value': 'LEATHER REBEL'},
-           'id': '23221',
-           'links': {'self': 'https://api.flowroute.com/v2/cnams/23221'},
-           'type': 'cnam'},
-          {'attributes': {'approval_datetime': '2018-05-23 '
-                                               '18:58:46.052602+00:00',
-                          'creation_datetime': '2018-05-22 '
-                                               '23:39:24.447054+00:00',
-                          'is_approved': True,
-                          'rejection_reason': None,
-                          'value': 'LEATHER REBELZ'},
-           'id': '23223',
-           'links': {'self': 'https://api.flowroute.com/v2/cnams/23223'},
-           'type': 'cnam'},
-          {'attributes': {'approval_datetime': '2018-05-23 '
-                                               '18:58:46.052602+00:00',
-                          'creation_datetime': '2018-05-22 '
-                                               '23:42:00.786818+00:00',
-                          'is_approved': True,
-                          'rejection_reason': None,
-                          'value': 'MORBO'},
-           'id': '23224',
-           'links': {'self': 'https://api.flowroute.com/v2/cnams/23224'},
-           'type': 'cnam'}],
- 'links': {'self': 'https://api.flowroute.com/v2/cnams?limit=10&offset=0'}}
+--List Approved CNAM Records
+{
+  "data": [
+    {
+      "attributes": {
+        "approval_datetime": "2018-04-23 17:04:30.829341+00:00",
+        "creation_datetime": "2018-04-19 21:03:04.932192+00:00",
+        "is_approved": true,
+        "rejection_reason": null,
+        "value": "BROWN BAG"
+      },
+      "id": "22790",
+      "links": {
+        "self": "https://api.flowroute.com/v2/cnams/22790"
+      },
+      "type": "cnam"
+    },
+    {
+      "attributes": {
+        "approval_datetime": "2018-05-23 18:58:46.052602+00:00",
+        "creation_datetime": "2018-05-22 23:38:27.794911+00:00",
+        "is_approved": true,
+        "rejection_reason": null,
+        "value": "LEATHER REBEL"
+      },
+      "id": "23221",
+      "links": {
+        "self": "https://api.flowroute.com/v2/cnams/23221"
+      },
+      "type": "cnam"
+    },
+    {
+      "attributes": {
+        "approval_datetime": "2018-05-23 18:58:46.052602+00:00",
+        "creation_datetime": "2018-05-22 23:42:00.786818+00:00",
+        "is_approved": true,
+        "rejection_reason": null,
+        "value": "MORBO"
+      },
+      "id": "23224",
+      "links": {
+        "self": "https://api.flowroute.com/v2/cnams/23224"
+      },
+      "type": "cnam"
+    }
+  ],
+  "links": {
+    "next": "https://api.flowroute.com/v2/cnams?is_approved=True&limit=3&offset=3",
+    "self": "https://api.flowroute.com/v2/cnams?is_approved=True&limit=3&offset=0"
+  }
+}
 ```
-#### get_cnam($cnam_id)
+#### listCNAMRecordDetails(cnamId, callback)
 
-The function accepts a CNAM record ID as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-cnam-record-details/). In the following example, we query for approved CNAM records on your account and then extract the ID of the first record returned and retrieve the details of that specific CNAM record. 
+The function accepts a CNAM record ID and a callback function as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-cnam-record-details/). In the following example, assign the ID of the first record returned from our previous API query and retrieve the details of that specific CNAM record. 
     
 ##### Example Request
 ```
-// CNAM Details
-echo "List CNAM Details " . $our_cnams[0]->id . "\n";
-$result = $client->getCNAMS()->getCNAMdetails($our_cnams[0]->id);
-var_dump($result);
+var cnam_details = cnams_controller.listCNAMRecordDetails(22790, callback)
+cnam_details.then(function(response) {
+    console.log("--List CNAM Record Details")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 ##### Example Response
 
 On success, the HTTP status code in the response header is `200 OK` and the response body contains a detailed cnam object in JSON format.
 
 ```
-List CNAM Details 17604
-{'data': {'attributes': {'approval_datetime': None,
-                         'creation_datetime': None,
-                         'is_approved': True,
-                         'rejection_reason': '',
-                         'value': 'TEST, MARIA'},
-          'id': '17604',
-          'links': {'self': 'https://api.flowroute.com/v2/cnams/17604'},
-          'type': 'cnam'}}
-```
-#### create_cnam_record($cnam_value)
-
-The function accepts a Caller ID value as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/create-a-new-cnam-record/). In the following example, we include a `generateRandomString` function to generate a four-character random string which we will concatenate with Flowroute and assign as our CNAM value. Note that you can enter up to 15 characters for your CNAM value.
-    
-##### Example Request
-```
-function generateRandomString($length = 10) {
-    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    $charactersLength = strlen($characters);
-    $randomString = '';
-    for ($i = 0; $i < $length; $i++) {
-        $randomString .= $characters[rand(0, $charactersLength - 1)];
-    }
-    return $randomString;
-}
-
-// Create a CNAM Record
-$cnam_value = 'Flowroute' . generateRandomString(4);
-$new_record = $client->getCNAMS()->createCNAM($cnam_value);
-var_dump($new_record);
-```
-
-##### Example Response
-
-On success, the HTTP status code in the response header is `201 Created` and the response body contains the newly created cnam object in JSON format. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record creation then prompts you to press "Enter". Afterwards, you should see a message on the limitation around CNAM record and phone number association.
-
-```
+--List CNAM Record Details
 {
   "data": {
     "attributes": {
-      "approval_datetime": null,
-      "creation_datetime": "2018-06-27 20:44:01.543801+00:00",
-      "is_approved": false,
+      "approval_datetime": "2018-04-23 17:04:30.829341+00:00",
+      "creation_datetime": "2018-04-19 21:03:04.932192+00:00",
+      "is_approved": true,
       "rejection_reason": null,
-      "value": "FLOWROUTEVMKM"
+      "value": "BROWN BAG"
     },
-    "id": "23922",
+    "id": "22790",
     "links": {
-      "self": "https://api.flowroute.com/v2/cnams/23922"
+      "self": "https://api.flowroute.com/v2/cnams/22790"
+    },
+    "relationships": {
+      "numbers": {
+        "data": []
+      }
     },
     "type": "cnam"
   }
 }
-New Record Created - Please press Enter to continue.
-
-CNAM Records cannot be associated with DIDs until they have been approved.  Typically within 24 hours.
 ```
-#### associate_cnam($cnam_id, $did)
+#### createANewCNAMRecord(body, mContentType, callback)
 
-The function accepts a CNAM record ID and a phone number as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-cnam-record-to-phone-number/). In the following example, we will call `getNumbers()` and `getCNAMs()` then associate the first number with the first CNAM record in the resulting numbers and CNAMs arrays. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record association with the phone number and prompts you to press "Enter" to continue.
+The function accepts a Caller ID value, content type of `application/vnd.api+json`, and a callback function as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/create-a-new-cnam-record/). Note that you can enter up to 15 characters for your CNAM value.
     
 ##### Example Request
 ```
-$cnam_value = $our_cnams[0]->attributes->value;
-$cnam_id =  $our_cnams[0]->id;
-echo "CNAM ID " . $cnam_id . "\n";
-echo "DID ID " . $did . "\n";
-$result = $client->getCNAMS()->associateCNAM($cnam_id, $did);
-var_dump($result);
+var new_cnam = { "value":"Heartwood" };
+var create_cnam = cnams_controller.createANewCNAMRecord(new_cnam, mContentType="application/vnd.api+json", callback);
+create_cnam.then(function(response) {
+    console.log("--Create a CNAM Record")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
+```
 
-wait_for_user("New Record Associated");
+##### Example Response
+
+On success, the HTTP status code in the response header is `201 Created` and the response body contains the newly created cnam object in JSON format. Note that CNAM records take up to 48 hours to be approved on your account and further association with a phone number takes 5-7 business days.
+
+```
+--Create a CNAM Record
+{
+  "data": {
+    "attributes": {
+      "approval_datetime": null,
+      "creation_datetime": "2018-07-10 23:14:28.529156+00:00",
+      "is_approved": false,
+      "rejection_reason": null,
+      "value": "HEARTWOOD"
+    },
+    "id": "24141",
+    "links": {
+      "self": "https://api.flowroute.com/v2/cnams/24141"
+    },
+    "type": "cnam"
+  }
+}
+```
+#### updateAssignACNAMRecordToYourPhoneNumber(numberId, cnamId, callback) 
+
+The function accepts a callback function, a CNAM record ID, and a phone number as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/assign-cnam-record-to-phone-number/). In the following example, we will associate our previously used phone number, `12062011682`, with our known approved CNAM record, `22790`.
+    
+##### Example Request
+```
+var associate_cnam = cnams_controller.updateAssignACNAMRecordToYourPhoneNumber(numberID=12062011682, cnamID=22790, callback);
+associate_cnam.then(function(response) {
+    console.log("--Associate a CNAM Record with a Phone Number")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 
 ##### Example Response
 On success, the HTTP status code in the response header is `202 Accepted` and the response body contains an attributes dictionary containing the `date_created` field and the assigned cnam object in JSON format. This request will fail if the CNAM you are trying to associate has not yet been approved.
 ```
-CNAM ID 22790
-DID ID 12062011682
+--Associate a CNAM Record with a Phone Number
 {'data': {'attributes': {'date_created': 'Fri, 01 Jun 2018 00:17:52 GMT'},
           'id': 22790,
           'type': 'cnam'}}
-New Record Associated - Please press Enter to continue.
 ```
-#### unassociate_cnam($number_id)
+#### deleteUnassignACNAMRecordFromYourPhoneNumber(numberId, callback) 
 
-The function accepts a phone number as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/unassign-a-cnam-record-from-phone-number/). In the following example, we will disassociate the same phone number that we've used in `associate_cnam()`. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record disassociation from the phone number and prompts you to press "Enter" to continue.
+The function accepts a callback function and a phone number as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/unassign-a-cnam-record-from-phone-number/). In the following example, we will disassociate the same phone number that we've used in `updateAssignACNAMRecordToYourPhoneNumber()`. 
     
 ##### Example Request
 ```
-// Un-associate the new CNAM Record from our DID
-$did = $ourDIDs[0]->id;
-$result = $client->getCNAMS()->unassociateCNAM($did);
-var_dump($result);
+var disassociate_cnam = cnams_controller.deleteUnassignACNAMRecordFromYourPhoneNumber(12065014286, callback)
+disassociate_cnam.then(function(response) {
+    console.log("--Unassign a CNAM Record from a Phone Number")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
 ##### Example Response
 On success, the HTTP status code in the response header is `202 Accepted` and the response body contains an attributes object with the date the CNAM was requested to be deleted, and the updated cnam object in JSON format. 
 
 ```
-{'data': {'attributes': {'date_created': 'Wed, 27 Jun 2018 20:59:36 GMT'},
-          'id': None,
-          'type': 'cnam'}}
-New Record Unassociated - Please press Enter to continue.
+--Unassign a CNAM Record from a Phone Number
+{
+  "data": {
+    "attributes": {
+      "date_created": "Tue, 10 Jul 2018 23:48:50 GMT"
+    },
+    "id": null,
+    "type": "cnam"
+  }
+}
 ```
-#### remove_cnam($cnam_id)
+#### deleteACNAMRecord(cnamId, callback)
 
-The function accepts a CNAM record ID as a parameter which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-cnam-record-from-account/). In the following example, we will be deleting our previously extracted `cnam_id` from the "List Approved CNAM Records" function call. This demo includes a `wait_for_user()` function which gives you a confirmation of the CNAM record deletion and prompts you to press "Enter" to continue.
+The function accepts a callback function and a CNAM record ID as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-cnam-record-from-account/). In the following example, we will be deleting our previously assigned `cnam_id` in the last function call. 
     
 ##### Example Request
 ```
-// Delete the CNAM Record used
-$result = $client->getCNAMS()->deleteCNAM($cnam_id);
-var_dump($result);
+var delete_cnam = cnams_controller.deleteACNAMRecord(22790, callback)
+delete_cnam.then(function(response) {
+    console.log("--Delete a CNAM Record")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 ```
-
 ##### Example Response
 On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
 
 ```
 204 No Content
-New Record Deleted - Please press Enter to continue.
 ```
 
 #### Errors

@@ -14,50 +14,52 @@ mobile_number = process.env.MOBILE_NUMBER
 var cnams_controller = flowroute.CnamsController;
 var numbers_controller = flowroute.NumbersController;
 
-var cnam = {"value":"Jerk Shack"};
+var delete_cnam = cnams_controller.deleteACNAMRecord(22790, callback)
+delete_cnam.then(function(response) {
+    console.log("--Delete a CNAM Record")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 
-var cnam_result = "";
-var cnam_id = null;
-var cnam_records = cnams_controller.listAccountCNAMRecords(limit=3, offset=null, isApproved=true, callback);
-cnam_records.then(async (response) => {
-  cnam_result = response;
-  cnam_id = cnam_result['data'][0]['id'];
+var disassociate_cnam = cnams_controller.deleteUnassignACNAMRecordFromYourPhoneNumber(12065014286, callback)
+disassociate_cnam.then(function(response) {
+    console.log("--Unassign a CNAM Record from a Phone Number")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 
-  console.log("--List Approved CNAM Records")
-  console.log(JSON.stringify(cnam_result, null, 2));
+var associate_cnam = cnams_controller.updateAssignACNAMRecordToYourPhoneNumber(numberID=12065014286, cnamID=22790, callback);
+associate_cnam.then(function(response) {
+    console.log("--Associate a CNAM Record with a Phone Number")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
 
-  console.log("--List CNAM Record Details")
-  var cnam_details = await cnams_controller.listE911RecordDetailslistCNAMRecordDetails(cnam_id, callback);
-  console.log(JSON.stringify(cnam_details, null, 2));
-  /*
-  console.log("--Validate an E911 Address")
-  var new_e911address = await e911s_controller.createValidateAnE911Address(e911address, callback);
-  console.log(JSON.stringify(new_e911address, null, 2));
-  
-  console.log("--Create and Validate an E911 Address")
-  new_e911address = await e911s_controller.createAndValidateANewE911Address(e911address, callback);
-  console.log(JSON.stringify(new_e911address, null, 2));
-  
-  console.log("--Update and Validate an E911 Address")
-  var updated_e911address = await e911s_controller.updateAndValidateAnExistingE911Address(e911_id, updatedaddress, callback);
-  console.log(JSON.stringify(updated_e911address, null, 2));
- 
-  console.log("--Assign An E911 Address to a Phone Number")
-  var e911_number_association = await e911s_controller.updateAssignAValidE911AddressToYourPhoneNumber(numberId=12065014286, e911_id, callback)
-  console.log(JSON.stringify(e911_number_association, null, 2));
-  
-  console.log("--List Phone Numbers Associated with an E911 Record")
-  var e911_numbers = await e911s_controller.listPhoneNumbersWithE911Record(e911_id, callback);
-  console.log(JSON.stringify(e911_numbers, null, 2));
-  
-  console.log("--Deactivate E911 Service for a Phone Number")
-  var deactivate_e911 = await e911s_controller.deleteDeactivateE911ServiceForYourPhoneNumber(numberId=12065014286, callback)
-  console.log(JSON.stringify(deactivate_e911, null, 2));
-  
-  console.log("--Delete E911 Record")
-  var delete_e911 = await e911s_controller.removeAnE911AddressFromYourAccount(e911_id, callback)
-  console.log(JSON.stringify(delete_e911, null, 2));
-*/
+var new_cnam = { "value":"Heartwood" };
+var create_cnam = cnams_controller.createANewCNAMRecord(new_cnam, mContentType="application/vnd.api+json", callback);
+create_cnam.then(function(response) {
+    console.log("--Create a CNAM Record")
+    console.log(JSON.stringify(response, null, 2));
+    console.log("Note that CNAM records take 24-48 hours before getting approved.");
+}, function(err) {
+  console.log(err);
+});
+
+var account_cnams = cnams_controller.listAccountCNAMRecords(limit=3, offset=null, isApproved=true, callback);
+account_cnams.then(function(response) {
+    console.log("--List Approved CNAM Records")
+    console.log(JSON.stringify(response, null, 2));
+}, function(err) {
+  console.log(err);
+});
+
+var cnam_details = cnams_controller.listCNAMRecordDetails(22790, callback)
+cnam_details.then(function(response) {
+    console.log("--List CNAM Record Details")
+    console.log(JSON.stringify(response, null, 2));
 }, function(err) {
   console.log(err);
 });
