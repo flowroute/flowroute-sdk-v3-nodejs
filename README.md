@@ -50,7 +50,7 @@ If you encounter any missing package error, run the following:
 * * *
 Usage
 ------------
-In Flowroute's approach to building the Node.js library v3, HTTP requests are handled by controllers named after the API resources they represent: **Numbers**, **Routes**, and **Messages**. These controllers contain the tasks and calllback functions used to perform messaging, number management, and route management within the Node.js library.
+In Flowroute's approach to building the Node.js library v3, HTTP requests are handled by controllers named after the API resources they represent: **Numbers**, **Routes**, **Messages**, **E911s**, and **CNAMs**. These controllers contain the tasks and callback functions used to perform messaging and number management which includes programmatic configuration of inbound voice routes, E911 addresses, and CNAM storage within the Node.js library.
 
 ## Controllers
 
@@ -115,7 +115,7 @@ The following shows **number_route_message_demo.js** as an example single file w
 require('dotenv').config();
 const flowroute = require('./lib');
 
-console.log("Number//Route Management v2 & Messaging v2.1 Demo");
+console.log("Number//Route//E911//CNAM Management v2 & Messaging v2.1 Demo");
 
 // Set up your api credentials and test mobile number for outbound SMS or MMS
 flowroute.Configuration.username = process.env.FR_ACCESS_KEY
@@ -852,7 +852,7 @@ e911_addresses.then(function(response) {
 
 ##### Example Response
 
-On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of e911 objects in JSON format. Note that this demo function iterates through all the E911 records on your account filtered by the parameters that you specify. The following example response has been clipped for brevity's sake.
+On success, the HTTP status code in the response header is `200 OK` and the response body contains an array of e911 objects in JSON format.
 
 ```
 --List Account E911 Addresses
@@ -971,7 +971,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 
 #### createValidateAnE911Address(e911Address, callback) 
 
-In the following example request, we instantiate `e911address` as an `E911Address` JSON body, directly initializing its different data attributes with example values. An `E911Address` object can have `label`, `first_name`, `last_name`, `street_name`, `street_number`, `address_type`, `address_type_number`, `city`, `state`, `country`, and `zipcode`. Learn more about the different body parameters in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-e911-addresses/). We then pass `e911address` as a parameter for the `createValidateAnE911Address` function.
+In the following example request, we instantiate `e911address` as an `E911Address` JSON body, directly initializing its different data attributes with example values. An `E911Address` object can have `label`, `first_name`, `last_name`, `street_name`, `street_number`, `address_type`, `address_type_number`, `city`, `state`, `country`, and `zipcode`. Learn more about the different body parameters in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/validate-e911-address/). We then pass `e911address` as a parameter for the `createValidateAnE911Address` function.
 
     
 ##### Example Request
@@ -1286,7 +1286,7 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 ```
 #### listCNAMRecordDetails(cnamId, callback)
 
-The function accepts a CNAM record ID and a callback function as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-cnam-record-details/). In the following example, assign the ID of the first record returned from our previous API query and retrieve the details of that specific CNAM record. 
+The function accepts a CNAM record ID and a callback function as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-cnam-record-details/). In the following example, we assign the ID of the first record returned from our previous API query and retrieve the details of that specific CNAM record. 
     
 ##### Example Request
 ```
@@ -1419,7 +1419,7 @@ On success, the HTTP status code in the response header is `202 Accepted` and th
 ```
 #### deleteACNAMRecord(cnamId, callback)
 
-The function accepts a callback function and a CNAM record ID as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-cnam-record-from-account/). In the following example, we will be deleting our previously assigned `cnam_id` in the last function call. 
+The function accepts a callback function and a CNAM record ID as parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/remove-cnam-record-from-account/). In the following example, we will be deleting our previously assigned `cnam_id` from the last function call. 
     
 ##### Example Request
 ```
@@ -1435,6 +1435,7 @@ delete_cnam.then(function(response) {
 On success, the HTTP status code in the response header is `204 No Content` which means that the server successfully processed the request and is not returning any content.
 
 ```
+--Delete a CNAM Record
 204 No Content
 ```
 
@@ -1443,7 +1444,12 @@ On success, the HTTP status code in the response header is `204 No Content` whic
 In cases of function errors, the Node.js library raises an exception which includes an error message, and the HTTP body that was received in the request. 
 
 ##### Example Error
-```
+```shell
 raise ErrorException('Forbidden – The server understood the request but refuses to authorize it.', _context)
 ```
-  
+
+#### Testing
+
+Once you are done configuring your Flowroute API credentials and updating the function parameters, you can run any of the demo files to see them in action. The Flowroute library demo files are named after the resource they represent: &lt;resource_name&gt;_demo.js.
+
+`node cnam_demo.js`
