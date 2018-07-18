@@ -45,7 +45,7 @@ Installation
 
 If you encounter any missing package error, run the following:
 
-`npm install <package_name`
+`npm install <package_name>`
 
 * * *
 Usage
