@@ -1209,10 +1209,6 @@ The Flowroute Node.js Library v3 allows you to make HTTP requests to the `cnams`
 
 All of the CNAM record management functions are encapsulated in `cnam_demo.js`.
 
-| API Reference Pages |
-| ------------------- |
-| The E911 and CNAM API reference pages are currently restricted to our beta customers, which means that all API reference links below currently return a `404 Not Found`. They will be publicly available during our E911 and CNAM APIs GA launch in a few weeks. |
-
 #### listAccountCNAMRecords(options, callback) 
 
 The function accepts a callback function and all the different CNAM query parameters which you can learn more about in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/list-account-cnam-records/). In the following example request, we will only retrieve 3 approved CNAM records. 
