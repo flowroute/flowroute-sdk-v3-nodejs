@@ -5,22 +5,22 @@ const flowroute = require('./lib');
 console.log("Number/Route Management v2 & Messaging v2.1 Demo");
 
 // Set up your api credentials and test mobile number for outbound SMS or MMS
-flowroute.Configuration.username = process.env.FR_ACCESS_KEY
-flowroute.Configuration.password = process.env.FR_SECRET_KEY
-mobile_number = process.env.MOBILE_NUMBER
+flowroute.Configuration.username = process.env.FR_ACCESS_KEY;
+flowroute.Configuration.password = process.env.FR_SECRET_KEY;
+mobile_number = process.env.MOBILE_NUMBER;
 
 // Instantiate API client and create controllers for Numbers, Messages, and Routes
-var numbers_controller = flowroute.NumbersController;
-var routes_controller = flowroute.RoutesController;
-var messages_controller = flowroute.MessagesController;
+const numbers_controller = flowroute.NumbersController;
+const routes_controller = flowroute.RoutesController;
+const messages_controller = flowroute.MessagesController;
 
-var max_setup_cost = 3.25;
-var limit = 3;
-var offset = 0;
+const max_setup_cost = 3.25;
+const limit = 3;
+const offset = 0;
 
 var callback = function(error, response, context){}
 
-areacodes = numbers_controller.listAvailableAreaCodes(limit, offset, max_setup_cost, callback);
+let areacodes = numbers_controller.listAvailableAreaCodes(limit, offset, max_setup_cost, callback);
 areacodes.then(function(response) {
   console.log("--List Available Area Codes")
   console.log(response);
@@ -84,7 +84,7 @@ accountroutes.then(function(response) {
   console.log(err);
 });
 
-var message_id = "mdr2-ca82be46e6ba11e79d08862d092cf73d"
+var message_id = "mdr2-ca82be46e6ba11e79d08862d092cf73d";
 mdrdetailed = messages_controller.lookUpAMessageDetailRecord(message_id, callback)
 mdrdetailed.then(function(response) {
   console.log("--Look Up a Message Detail Record")
@@ -92,4 +92,26 @@ mdrdetailed.then(function(response) {
 }, function(err) {
   console.log(err);
 });
+
+request_body = {
+  "data": {
+    "type": "message",
+    "attributes": {
+      "to": String(mobile_number),
+      "from": String(number_id),
+      "body": "hello there",
+      "is_mms": "true",
+      "media_urls": ["http://s3.amazonaws.com/barkpost-assets/50+GIFs/37.gif"]
+    }
+  }
+}
+console.log("request", request_body)
+
+result = messagesController.createSendAMessage(request_body).then((result) => {
+  console.log("Message result")
+  console.log(result)
+},
+(error) => {
+    console.log("Message Error", error)
+})
 
