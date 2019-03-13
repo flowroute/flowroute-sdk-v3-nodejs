@@ -56,7 +56,7 @@ updated_e911address.then(function(response) {
   console.log(err);
 });
 
-var new_e911address = e911s_controller.createValidateAnE911Address(e911address, callback);
+var new_e911address = e911s_controller.validateAnE911Address(e911address, callback);
 new_e911address.then(function(response) {
     console.log("--Validate an E911 Address")
     console.log(JSON.stringify(response, null, 2));

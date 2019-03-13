@@ -89,7 +89,7 @@ Contains all of the functions necessary to create, validate, update, and delete 
 *   [createAndValidateANewE911Address(e911Address, callback)](#createandvalidateanewe911addresse911address-callback) \- Lets you create and validate an E911 address within the US and Canada which can then be assigned to any of the long code or toll-free numbers on your account. To assign an E911 address to your number, see "Assign a Valid E911 Address to Your Phone Number".
 *   [listAccountE911Addresses(options, callback)](#listaccounte911addressesoptions-callback) \- Returns a list of all E911 records on your account by default. You can apply search filters using any of the optional query parameters.
 *   [listE911RecordDetails(e911ID, callback)](#liste911recorddetailse911id-callback) \- Returns details on a specified E911 record ID.
-*   [createValidateAnE911Address(e911Address, callback)](#createvalidateane911addresse911address-callback) \- Lets you validate an E911 address whether it is a new or an existing address on your account.
+*   [validateAnE911Address(e911Address, callback)](#createvalidateane911addresse911address-callback) \- Lets you validate an E911 address whether it is a new or an existing address on your account.
 *   [updateAndValidateAnExistingE911Address(e911Id, e911Address, callback)](#updateandvalidateanexistinge911addresse911id-e911address-callback) \- Lets you update and validate an existing E911 address on your account. You must create the E911 address first by following "Create and Validate a New E911 Address".
 *   [updateAssignAValidE911AddressToYourPhoneNumber(numberId, e911Id, callback)](#updateassignavalide911addresstoyourphonenumbernumberid-e911id-callback) \- Lets you assign a valid E911 address to a specific long code or toll-free phone number in your account. This endpoint does not return an error for subsequent attempts at associating a phone number with the same E911 record. The E911 record assignment charge only occurs on the first successful attempt. Note that you can later assign a different `e911_id` to the same phone number and will be charged accordingly.
 *   [deleteDeactivateE911ServiceForYourPhoneNumber(numberId, callback)](#deletedeactivatee911serviceforyourphonenumbernumberid-callback) \- Lets you deactivate the current E911 service for your phone number.
@@ -693,7 +693,27 @@ The function accepts a message object in JSON format and `callback` as parameter
 ##### Example Request
 ```node
 console.log ("---Send A Message")
-pprint.pprint(result)
+
+request_body = {
+    "data": {
+      "type": "message",
+      "attributes": {
+        "to": String(mobile_number),
+        "from": String(number_id),
+        "body": "hello there",
+        "is_mms": "true",
+        "media_urls": ["http://s3.amazonaws.com/barkpost-assets/50+GIFs/37.gif"]
+      }
+    }
+  }
+
+  result = messagesController.createSendAMessage(request_body).then((result) => {
+    console.log("Message result")
+    console.log(result)
+  },
+  (error) => {
+      console.log("Message Error", error)
+  })
 ```
 Note that this function call is currently commented out. Uncomment to test the `send_a_message` function.
 
@@ -969,15 +989,15 @@ On success, the HTTP status code in the response header is `200 OK` and the resp
 }
 ```
 
-#### createValidateAnE911Address(e911Address, callback) 
+#### validateAnE911Address(e911Address, callback) 
 
-In the following example request, we instantiate `e911address` as an `E911Address` JSON body, directly initializing its different data attributes with example values. An `E911Address` object can have `label`, `first_name`, `last_name`, `street_name`, `street_number`, `address_type`, `address_type_number`, `city`, `state`, `country`, and `zipcode`. Learn more about the different body parameters in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/validate-e911-address/). We then pass `e911address` as a parameter for the `createValidateAnE911Address` function.
+In the following example request, we instantiate `e911address` as an `E911Address` JSON body, directly initializing its different data attributes with example values. An `E911Address` object can have `label`, `first_name`, `last_name`, `street_name`, `street_number`, `address_type`, `address_type_number`, `city`, `state`, `country`, and `zipcode`. Learn more about the different body parameters in the [API reference](https://developer.flowroute.com/api/numbers/v2.0/validate-e911-address/). We then pass `e911address` as a parameter for the `validateAnE911Address` function.
 
     
 ##### Example Request
 ```
 var e911address = {"data":{"type": "e911", "attributes":{"label":"Belfry Oddities II", "first_name": "Jim", "last_name": "Law", "street_number": "123", "street_name": "Smith St", "address_type":"Apartment", "address_type_number": "666", "city": "Seattle", "state": "WA", "country": "US", "zip": "98101"}}};
-var validate_address = e911s_controller.createValidateAnE911Address(e911address, callback);
+var validate_address = e911s_controller.validateAnE911Address(e911address, callback);
 validate_address.then(function(response) {
   console.log("--Validate an E911 Address")
   console.log(JSON.stringify(response, null, 2));
